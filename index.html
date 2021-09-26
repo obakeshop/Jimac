@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>歌枠字幕ジェネレータ</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://kit.fontawesome.com/55dea25b7a.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="v-model-textarea" class="demo">
+    <div class="paper">
+      <div class="paper-content">
+          <textarea contenteditable v-model="lylics" @input="changeLylics" placeholder="歌詞" autofocus></textarea>
+      </div>
+    </div>
+    <div id="controller">
+      <div class="button" @click="moveIndex(-1)"><i class="fas fa-chevron-left"></i></div>
+      <div class="button">{{index}}</div>
+      <div class="button" @click="moveIndex(+1)"><i class="fas fa-chevron-right"></i></div>
+      <input class="input" style="width:100px;" type="text" v-model="color" placeholder="#Color">
+    </div>
+    <div class="button lylic-area">
+      {{ currentLylic }}
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
