@@ -6,20 +6,21 @@ body{
 }
 
 .lylic-area {
-  font-size: 5em;
   width: 100%;
-  background-color: #0F0;
+  height: 15vw;
 }
+
+/****** TextArea Style ******/
 
 .paper {
   position: relative;
   width: 100%;
   min-width: 400px;
   height: 480px;
-  margin: 0 auto;
+  margin: 0 auto 0px auto;
   background: #fafafa;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+  box-shadow: 0 2px 3px rgba(0,0,0,.2);
   overflow: hidden;
 }
 .paper:before {
@@ -55,4 +56,29 @@ body{
   font-size: 18px;
   box-sizing: border-box;
   z-index: 1;
+}
+
+/****** Lylic Style ******/
+
+.lylic-style{
+  display: inline-block;
+  position: relative;
+  font-size: 6vw;
+  font-family: 'Yusei Magic', sans-serif;
+  -webkit-text-stroke-width: 1.6vw;
+}
+.lylic-style::after{
+  content: attr(data-text);
+  position: absolute;
+  color: #fff;
+  left: 0;
+  -webkit-text-stroke-width: 1vw;
+  z-index: 20;
+}
+.lylic-style::before{
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  -webkit-text-stroke-width: 0vw;
+  z-index: 30;
 }

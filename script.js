@@ -3,7 +3,9 @@ Vue.createApp({
     return {
       items: [],
       index: 0,
-      currentLylic: 'a'
+      currentLylic: '',
+      backColor: "#00FF00",
+      textColor: "#FF3399"
     }
   },
   methods: {
@@ -24,13 +26,12 @@ Vue.createApp({
     },
     moveIndex(i) {
       const newIdx = this.index + i;
-      if (0 <= newIdx && newIdx <= this.items.length-1) {
-        this.index = newIdx;
-      }
+      this.index = (0 <= newIdx && newIdx <= this.items.length-1) ? newIdx : 0;
       this.updateLylic();
     },
     updateLylic() {
       this.currentLylic = this.items[this.index].lylic;
+      $("#lylic-test").addClass("lylic-style");
     }
   },
   mounted: function () {
@@ -40,9 +41,3 @@ Vue.createApp({
     })
   },
 }).mount('#v-model-textarea')
-
-$(function() {
-	$(".lined").linedtextarea(
-		{selectedLine: 18}
-	);
-});

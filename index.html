@@ -4,26 +4,46 @@
   <meta charset="UTF-8">
   <title>歌枠字幕ジェネレータ</title>
   <script src="https://unpkg.com/vue@next"></script>
+  <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous"></script>
   <script src="https://kit.fontawesome.com/55dea25b7a.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
   <div id="v-model-textarea" class="demo">
     <div class="paper">
       <div class="paper-content">
-          <textarea contenteditable v-model="lylics" @input="changeLylics" placeholder="歌詞" autofocus></textarea>
+          <textarea contenteditable v-model="lylics" @input="changeLylics" placeholder="曲名 / アーティスト
+
+ここに歌詞を貼り付けます" autofocus></textarea>
       </div>
     </div>
     <div id="controller">
-      <div class="button" @click="moveIndex(-1)"><i class="fas fa-chevron-left"></i></div>
-      <div class="button">{{index}}</div>
-      <div class="button" @click="moveIndex(+1)"><i class="fas fa-chevron-right"></i></div>
-      <input class="input" style="width:100px;" type="text" v-model="color" placeholder="#Color">
+      <div class="button" @click="moveIndex(-1000)"><i class="fas fa-angle-double-left"></i></div>
+      <div class="button" @click="moveIndex(-1)"><i class="fas fa-angle-left"></i></div>
+      <div class="button" >{{index}}</div>
+      <div class="button" @click="moveIndex(+1)"><i class="fas fa-angle-right"></i></div>
+      <div class="button" style="border: none; background-color: transparent; padding-left: 15px; padding-right: 3px;">Back:</div>
+      <input class="input" style="width:44px;" type="color" v-model="backColor" placeholder="#BackColor">
+      <div class="button" style="border: none; background-color: transparent; padding-left: 15px; padding-right: 3px;">Text:</div>
+      <input class="input" style="width:44px;" type="color" v-model="textColor" placeholder="#TextColor">
     </div>
-    <div class="button lylic-area">
-      {{ currentLylic }}
+    <div class="button lylic-area" v-bind:style="{backgroundColor: backColor}">
+      <component is="style">
+        .lylic-style{
+          color: {{ textColor }};
+        }
+        .lylic-style::before{
+          color: {{ textColor }};
+        }
+      </component>
+      <h1 id="lylic-test" v-bind:data-text="currentLylic">{{ currentLylic }}</h1>
     </div>
+    
   </div>
 
   <script src="script.js"></script>
