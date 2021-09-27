@@ -2,7 +2,7 @@ const jimakuGenerator = Vue.createApp({
   data() {
     return {
       songId: 1, // 曲ID
-      lylic: `曲名 / アーティスト
+      lyric: `曲名 / アーティスト
 
 ここに歌詞を貼り付けます`, // 歌詞
       jimaku: '', // 字幕のテキスト
@@ -20,24 +20,24 @@ const jimakuGenerator = Vue.createApp({
     
     loadSong(songId) { // データをローカルストレージから読込み
       this.songId = songId
-      this.lylic = localStorage.getItem(songId);
-      document.getElementById('lylic').selectionStart = 0;
-      this.changeLylic();
+      this.lyric = localStorage.getItem(songId);
+      document.getElementById('lyric').selectionStart = 0;
+      this.changelyric();
     },
 
-    save(sondId, lylic) {
+    save(sondId, lyric) {
       this.songId = sondId;
-      this.lylic = lylic;
-      localStorage.setItem(this.songId, this.lylic);
+      this.lyric = lyric;
+      localStorage.setItem(this.songId, this.lyric);
     },
 
-    changeLylic() { // 歌詞が更新されたときに保存して画面更新
-      this.save(this.songId, this.lylic);
+    changelyric() { // 歌詞が更新されたときに保存して画面更新
+      this.save(this.songId, this.lyric);
       this.updateJimaku();
       repertory.load();
     },
 
-    getLylics() { return (this.lylic || '').split('\n'); },
+    getlyrics() { return (this.lyric || '').split('\n'); },
 
     moveEditorCousor(e) { // エディター内で十字キーまたはエンターを押した時に字幕の行番号を更新
       if ([13,37,38,39,40].includes(e.keyCode)) {
@@ -50,7 +50,7 @@ const jimakuGenerator = Vue.createApp({
         return;
       }
 
-      const invalid = v => !v || v < 0 || this.getLylics().length-1 < v;
+      const invalid = v => !v || v < 0 || this.getlyrics().length-1 < v;
       this.jimakuIndex = invalid(value) ? 0 : value;
       this.updateJimaku();
     },
@@ -59,7 +59,7 @@ const jimakuGenerator = Vue.createApp({
       if (document.activeElement.tagName !== "TEXTAREA") {
         return;
       }
-      const match = this.lylic.substr(0, document.activeElement.selectionStart).match(/\n/g);
+      const match = this.lyric.substr(0, document.activeElement.selectionStart).match(/\n/g);
       this.setJimakuIndex(match ? match.length : 0);
     },
 
@@ -68,7 +68,7 @@ const jimakuGenerator = Vue.createApp({
         this.jimaku = ""; // Reset animation
       }
       setTimeout(() => {
-        this.jimaku = this.getLylics()[this.jimakuIndex];
+        this.jimaku = this.getlyrics()[this.jimakuIndex];
         $("#jimaku-0").addClass("jimaku-0");
         $("#jimaku-1").addClass("jimaku-1");
         $("#jimaku-2").addClass("jimaku-2");
@@ -93,6 +93,11 @@ const jimakuGenerator = Vue.createApp({
       });
       localStorage.setItem("songs", JSON.stringify(songs));
       localStorage.removeItem(this.sondId);
+
+      if (!songs.length) {
+        repertory.addSong();
+      }
+
       repertory.load();
       repertory.select(songs[0].id);
     },
@@ -103,7 +108,7 @@ const jimakuGenerator = Vue.createApp({
         `曲名 / アーティスト
 
 ここに歌詞を貼り付けます`);
-      const song = { id: this.songId, title: this.getLylics()[0] };
+      const song = { id: this.songId, title: this.getlyrics()[0] };
       let songs = JSON.parse(localStorage.getItem("songs")) || [];
       songs.push(song);
       localStorage.setItem("songs", JSON.stringify(songs));
@@ -157,3 +162,5 @@ const repertory = Vue.createApp({
 $(window).keyup(function(event) {
   jimakuGenerator.windowKeyEvent(event);
 });
+
+new Clipboard('#jimaku');

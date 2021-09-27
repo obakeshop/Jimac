@@ -20,6 +20,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-extensions@4.0.0/dist/css/bulma-extensions.min.css">
   <script src="https://cdn.jsdelivr.net/npm/bulma-extensions@4.0.0/dist/js/bulma-extensions.min.js"></script>
 
+  <!-- Clipboard -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.8/clipboard.min.js"></script>
+  
   <link rel="stylesheet" href="style.css">
 
 </head>
@@ -28,7 +31,7 @@
   <h1 class="title">歌枠字幕ジェネレーター</h1>
 
   <section>
-    <div class="container" >
+    <div class="container">
       <div class="columns is-mobile">
 
         <!-- Repertory -->
@@ -43,7 +46,7 @@
         <div id="jimakuGenerator" class="column content">
           <div style="width:100%;">
 
-            <div class="button jimaku-area">
+            <button id="jimaku" class="button jimaku-area" :data-clipboard-text="jimaku">
 
               <!-- Jimaku text CSS -->
               <component is="style">
@@ -76,7 +79,7 @@
               <div v-show="jimakuOutline" id="jimaku-0"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: i*100+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
               <div v-show="jimakuOutline" id="jimaku-1"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: i*100+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
               <div id="jimaku-2"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: i*100+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
-            </div>
+            </button>
 
             <div id="controller">
 
@@ -124,16 +127,16 @@
               
             </div>
 
-            <!-- LylicEditor -->
+            <!-- lyricEditor -->
             <input class="input" type="hidden" v-model="songId">
             <div class="paper">
               <div class="paper-content">
                   <textarea 
-                    id="lylic"
+                    id="lyric"
                     autofocus
                     contenteditable 
-                    v-model="lylic" 
-                    @input="changeLylic"
+                    v-model="lyric" 
+                    @input="changelyric"
                     @focus="updateJimakuIndex"
                     @click="updateJimakuIndex"
                     @keyup="moveEditorCousor"

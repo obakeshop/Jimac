@@ -50,7 +50,7 @@ input {
 
 /****** TextArea ******/
 
-#lylic {
+#lyric {
   resize: none;
 }
 
@@ -115,7 +115,7 @@ input {
   padding: 1rem;
 }
 
-/****** Lylic ******/
+/****** lyric ******/
 
 .jimaku-0{
   -webkit-text-stroke-width: 1.3vw;
