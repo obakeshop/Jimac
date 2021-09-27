@@ -1,93 +1,98 @@
 const vue = Vue.createApp({
   data() {
     return {
-      items: [],
-      index: 0,
-      currentLylic: '',
-      backColor: "#00FF00",
-      textColor: "#3333FF",
-      fontFamily: "'Kiwi Maru', serif",
-      fontSize: "42pt",
-      textAnim: false
+      songId: 1, // 曲ID
+      lylic: '', // 歌詞
+      lylics: [], // 歌詞を行ごとに分解したデータ
+      jimaku: '', // 字幕のテキスト
+      jimakuIndex: 0, // 字幕の行番号
+      jimakuBackColor: "#00FF00", // 字幕の背景色
+      jimakuTextColor: "#3333FF", // 字幕のテキストカラー
+      jimakuFontFamily: "'Kiwi Maru', serif", // 字幕フォントファミリー
+      jimakuFontSize: "42pt", // 字幕フォントサイズ
+      jimakuAnim: false // 字幕をアニメーションさせるか
     }
   },
+
   methods: {
-    changeLylics(e) {
-      console.log(1);
-      localStorage.setItem('myCat', this.lylics);
-      this.items = (this.lylics || "").split('\n').map(e => { return { lylic: e }; });
-      this.updateLylic();
+    loadSong(songId) { // データをローカルストレージから読込み
+      this.lylic = localStorage.getItem(songId);
+      this.changeLylic();
     },
-    setIndex(value) {
-      if (this.index === value) {
+
+    changeLylic(e) { // 歌詞が更新されたときに保存して画面更新
+      localStorage.setItem(this.songId, this.lylic);
+      this.lylics = (this.lylic || '').split('\n');
+      this.updateJimaku();
+    },
+
+    moveEditorCousor(e) { // エディター内で十字キーまたはエンターを押した時に字幕の行番号を更新
+      switch (e.keyCode) {
+        case 13: 
+        case 37: 
+        case 38: 
+        case 39: 
+        case 40: 
+          this.updateJimakuIndex();
+          break;
+      }
+    },
+
+    setJimakuIndex(value) { // 字幕行番号の変更→字幕更新
+      if (this.jimakuIndex === value) {
         return;
       }
 
-      if (!value || value < 0 || this.items.length-1 < value) {
-        this.index = 0;
+      if (!value || value < 0 || this.lylics.length-1 < value) {
+        this.jimakuIndex = 0;
       } else {
-        this.index = value;
+        this.jimakuIndex = value;
       }
-      this.updateLylic();
+      this.updateJimaku();
     },
-    updateLylic() {
-      if (this.textAnim) {
-        this.currentLylic = ""; // Reset animation
-      }
-      setTimeout(() => {
-        this.currentLylic = this.items[this.index].lylic;
-        $("#lylic-test-after").addClass("lylic-style after");
-        $("#lylic-test-main").addClass("lylic-style main");
-        $("#lylic-test-before").addClass("lylic-style before");
-      }, 50); // Animation waiting
-    },
-    keyEvent(event) {
-      const tagName = document.activeElement.tagName; 
-      if (tagName === "INPUT") {
-        return;
 
-      } else if (tagName === "TEXTAREA") {
-        switch (event.keyCode) {
-          case 13: 
-          case 37: 
-          case 38: 
-          case 39: 
-          case 40: 
-            this.updateIndex();
-            break;
-        }
-
-      } else {
-        console.log(1);
-        switch (event.keyCode) {
-          case 37: this.setIndex(this.index-1); break;
-          case 39: this.setIndex(this.index+1); break;
-        }
-      }
-    },
-    updateIndex() {
+    updateJimakuIndex() { // 字幕行番号をカーソルの位置に更新
       if (document.activeElement.tagName !== "TEXTAREA") {
         return;
       }
-      const match = this.lylics.substr(0, document.activeElement.selectionStart).match(/\n/g);
-      const index = match ? match.length : 0;
-      this.setIndex(index);
-    }
+      const match = this.lylic.substr(0, document.activeElement.selectionStart).match(/\n/g);
+      const jimakuIndex = match ? match.length : 0;
+      this.setJimakuIndex(jimakuIndex);
+    },
+
+    updateJimaku() { // 字幕の更新
+      if (this.jimakuAnim) {
+        this.jimaku = ""; // Reset animation
+      }
+      setTimeout(() => {
+        this.jimaku = this.lylics[this.jimakuIndex];
+        $("#jimaku-0").addClass("jimaku-0");
+        $("#jimaku-1").addClass("jimaku-1");
+        $("#jimaku-2").addClass("jimaku-2");
+      }, 50); // Animation waiting
+    },
+
+    windowKeyEvent(event) { // ショートカットキー制御
+      const tagName = document.activeElement.tagName; 
+      if (["INPUT", "TEXTAREA"].includes(tagName)) {
+        return;
+      }
+
+      switch (event.keyCode) {
+        case 37: this.setJimakuIndex(this.jimakuIndex-1); break;
+        case 39: this.setJimakuIndex(this.jimakuIndex+1); break;
+      }
+    },
+
   },
-  filters: {
-    cnvSpace: function (t) {
-      console.log(t);
-      return t;
-    }
-  },
-  mounted: function () {
+  mounted: function () { // ウィンドウ読込み時の初期化
     this.$nextTick(function () {
-      this.lylics = localStorage.getItem("myCat");
-      this.changeLylics();
+      this.loadSong(this.songId);
     })
   },
 }).mount('#jimakuGenerator');
 
+// ショートカットキー用のイベント取得
 $(window).keyup(function(event){
-  vue.keyEvent(event);
+  vue.windowKeyEvent(event);
 });

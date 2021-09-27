@@ -3,15 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <title>歌枠字幕ジェネレータ</title>
+
+  <!-- Vue -->
   <script src="https://unpkg.com/vue@next"></script>
+
+  <!-- JQuery -->
   <script
     src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
     crossorigin="anonymous"></script>
+
+  <!-- font Awesome -->
   <script src="https://kit.fontawesome.com/55dea25b7a.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- Bulma -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-extensions@4.0.0/dist/css/bulma-extensions.min.css">
   <script src="https://cdn.jsdelivr.net/npm/bulma-extensions@4.0.0/dist/js/bulma-extensions.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -25,8 +34,9 @@
         <!-- Repertory -->
         <div class="column sidebar">
           
-          <div class="repertory" style="margin: 5px;">
-            <div class="card">
+          <div class="repertory">
+
+            <div class="card song">
               <div class="card-content">
                 <div class="content">
                   Lemon / 米津玄師
@@ -34,13 +44,14 @@
               </div>
             </div>
 
-            <div class="card">
+            <div class="card song">
               <div class="card-content">
                 <div class="content">
-                  Lemon / 米津玄師
+                  新規追加＋
                 </div>
               </div>
             </div>
+
           </div>
 
         </div>
@@ -48,80 +59,61 @@
         <div class="column content">
           <div style="width:100%;">
 
-            <div class="button lylic-area" v-bind:style="{backgroundColor: backColor}">
+            <div class="button jimaku-area">
+
+              <!-- Jimaku text CSS -->
               <component is="style">
-                .lylic-style{
-                  color: {{ textColor }};
-                  font-size: {{ fontSize }};
-                  font-family: {{ fontFamily }};
+                .jimaku-area {
+                  background-color: {{ jimakuBackColor }};
                 }
-                .lylic-style.before{
-                  color: {{ textColor }};
+                .jimaku{
+                  font-size: {{ jimakuFontSize }};
+                  font-family: {{ jimakuFontFamily }};
+                }
+                .jimaku-0,.jimaku-2{
+                  color: {{ jimakuTextColor }};
                 }
               </component>
-              <div id="lylic-test-before" v-bind:data-text="currentLylic">
-                <span 
-                  v-for="(t, index) in currentLylic" 
-                  :key="index" 
-                  class="item" 
-                  :style="{animationDelay: index*100+'ms'}">
-                  {{ t === ' ' ? '\xa0' : t }}
-                </span>
-              </div>
               
-              <div id="lylic-test-main" v-bind:data-text="currentLylic">
-                <span 
-                  v-for="(t, index) in currentLylic" 
-                  :key="index" 
-                  class="item" 
-                  :style="{animationDelay: index*100+'ms'}">
-                  {{ t === ' ' ? '\xa0' : t }}
-                </span>
-              </div>
-              
-              <div id="lylic-test-after" v-bind:data-text="currentLylic">
-                <component v-if="textAnim" is="style">
-                  @keyframes text-in {
-                    0% {
-                      transform: translate(0, -20px);
-                      opacity: 0;
-                    }
+              <!-- Jimaku anim CSS (Toggle) -->
+              <component v-if="jimakuAnim" is="style">
+                @keyframes text-in {
+                  0% {
+                    transform: translate(0, -20px);
+                    opacity: 0;
                   }
-                  .item {
-                    display: inline-block;
-                    animation: text-in .8s cubic-bezier(0.22, 0.15, 0.25, 1.43) 0s backwards;
-                  }
-                </component>
-                <span 
-                  v-for="(t, index) in currentLylic" 
-                  :key="index" 
-                  class="item" 
-                  :style="{animationDelay: index*100+'ms'}">
-                  {{ t === ' ' ? '\xa0' : t }}
-                </span>
-              </div>
+                }
+                .item {
+                  display: inline-block;
+                  animation: text-in .8s cubic-bezier(0.22, 0.15, 0.25, 1.43) 0s backwards;
+                }
+              </component>
+
+              <div id="jimaku-0"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: i*100+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
+              <div id="jimaku-1"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: i*100+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
+              <div id="jimaku-2"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: i*100+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
             </div>
 
             <div id="controller">
 
-              <!-- LylicIndex -->
-              <div class="button" @click="setIndex(0)"><i class="fas fa-angle-double-left"></i></div>
-              <div class="button" @click="setIndex(this.index-1)"><i class="fas fa-angle-left"></i></div>
-              <div class="button" style="width:44px; background-color: rgb(255,255,255,0.5);">{{index}}</div>
-              <div class="button" @click="setIndex(this.index+1)"><i class="fas fa-angle-right"></i></div>
+              <!-- JimakuIndex -->
+              <div class="button" @click="setJimakuIndex(0)"><i class="fas fa-angle-double-left"></i></div>
+              <div class="button" @click="setJimakuIndex(this.jimakuIndex-1)"><i class="fas fa-angle-left"></i></div>
+              <div class="button" style="width:44px; background-color: rgb(255,255,255,0.5);">{{jimakuIndex}}</div>
+              <div class="button" @click="setJimakuIndex(this.jimakuIndex+1)"><i class="fas fa-angle-right"></i></div>
 
               <!-- BackColor -->
               <div class="button" style="border: none; background-color: transparent; padding-left: 15px; padding-right: 4px;">Back:</div>
-              <input class="input" style="width:44px;" type="color" v-model="backColor" placeholder="#BackColor">
+              <input class="input" style="width:44px;" type="color" v-model="jimakuBackColor" placeholder="#BackColor">
               
               <!-- TextColor -->
               <div class="button" style="border: none; background-color: transparent; padding-left: 15px; padding-right: 4px;">Text:</div>
-              <input class="input" style="width:44px;" type="color" v-model="textColor" placeholder="#TextColor">
+              <input class="input" style="width:44px;" type="color" v-model="jimakuTextColor" placeholder="#TextColor">
               
               <!-- FontFamily -->
               <div class="button" style="border: none; background-color: transparent; padding-left: 15px; padding-right: 4px;">Font:</div>
               <div class="select">
-                <select name="fontFamily" style="width:170px;" v-model="fontFamily">
+                <select name="fontFamily" style="width:170px;" v-model="jimakuFontFamily">
                   <option value="'Kiwi Maru', serif">Kiwi Maru</option>
                   <option value="'Yusei Magic', sans-serif">Yusei Magic</option>
                   <option value="'Hachi Maru Pop', cursive">Hachi Maru Pop</option>
@@ -132,26 +124,28 @@
 
               <!-- FontSize -->
               <div class="button" style="border: none; background-color: transparent; padding-left: 15px; padding-right: 4px;">Size:</div>
-              <input class="input" style="width:60px;" type="text" v-model="fontSize">
+              <input class="input" style="width:60px;" type="text" v-model="jimakuFontSize">
 
               <!-- Animation -->
               <div class="field" style="display: inline;">
-                <input id="switchRtlExample" v-model="textAnim" type="checkbox" name="switchRtlExample" class="switch is-rtl" checked="checked">
+                <input id="switchRtlExample" v-model="jimakuAnim" type="checkbox" name="switchRtlExample" class="switch is-rtl" checked="checked">
                 <label for="switchRtlExample" style="padding-left: 15px; padding-right: 53px; top: 8px;">Animation:</label>
               </div>
             </div>
 
-            <!-- LylicsEditor -->
+            <!-- LylicEditor -->
+            <input class="input" type="text" v-model="songId">
             <div class="paper">
               <div class="paper-content">
                   <textarea 
-                    id="lylics"
+                    id="lylic"
                     autofocus
                     contenteditable 
-                    v-model="lylics" 
-                    @input="changeLylics"
-                    @focus="updateIndex"
-                    @click="updateIndex" 
+                    v-model="lylic" 
+                    @input="changeLylic"
+                    @focus="updateJimakuIndex"
+                    @click="updateJimakuIndex"
+                    @keyup="moveEditorCousor"
                     placeholder=
 "曲名 / アーティスト
 
