@@ -91,7 +91,6 @@ const vue = Vue.createApp({
   },
   mounted: function () { // ウィンドウ読込み時の初期化
     this.$nextTick(function () {
-      this.changeLylic();
       this.loadSong(this.songId);
     })
   },
