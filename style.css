@@ -50,6 +50,10 @@ input {
 
 /****** TextArea ******/
 
+#lylic {
+  resize: none;
+}
+
 .paper {
   position: relative;
   width: 100%;
@@ -100,7 +104,6 @@ input {
 
 .repertory{
   font-family: 'Kiwi Maru', serif;
-  margin: 5px;
   width: 100%;
 }
 

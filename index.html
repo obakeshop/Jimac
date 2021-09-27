@@ -28,49 +28,19 @@
   <h1 class="title">歌枠字幕ジェネレーター</h1>
 
   <section>
-    <div id="jimakuGenerator" class="container" >
+    <div class="container" >
       <div class="columns is-mobile">
 
         <!-- Repertory -->
-        <div class="column sidebar">
+        <div id="repertory" class="column sidebar">
           <div class="repertory">
-
-            <div class="card song">
-              <div class="card-content">
-                <div class="content">
-                  曲名 / アーティスト
-                </div>
-              </div>
-            </div>
-            
-            <div class="card song">
-              <div class="card-content">
-                <div class="content">
-                  曲名 / アーティスト
-                </div>
-              </div>
-            </div>
-            
-            <div class="card song">
-              <div class="card-content">
-                <div class="content">
-                  曲名 / アーティスト
-                </div>
-              </div>
-            </div>
-
-            <div class="card song">
-              <div class="card-content">
-                <div class="content">
-                  新規追加＋
-                </div>
-              </div>
-            </div>
+            <div v-for="song in repertory" class="button" style="width: 100%; margin-bottom: 5px;" @click="select(song.id)">{{ song.title }}</div>
+            <div class="button" style="width: 100%; margin-bottom: 5px;" @click="addSong">新規追加＋</div>
 
           </div>
         </div>
         
-        <div class="column content">
+        <div id="jimakuGenerator" class="column content">
           <div style="width:100%;">
 
             <div class="button jimaku-area">
@@ -140,21 +110,22 @@
               <div class="button jimakuCtrl">Size:</div>
               <input class="input" style="width:60px;" type="text" v-model="jimakuFontSize">
 
+              <!-- Outline -->
+              <div class="field" style="display: inline;">
+                <input id="outlineSw" v-model="jimakuOutline" type="checkbox" name="outlineSw" class="switch is-rtl">
+                <label for="outlineSw" style="padding-left: 15px; padding-right: 53px; top: 8px;">Outline:</label>
+              </div>
+
               <!-- Animation -->
               <div class="field" style="display: inline;">
                 <input id="animSw" v-model="jimakuAnim" type="checkbox" name="animSw" class="switch is-rtl">
                 <label for="animSw" style="padding-left: 15px; padding-right: 53px; top: 8px;">Animation:</label>
               </div>
               
-              <!-- Outline -->
-              <div class="field" style="display: inline;">
-                <input id="outlineSw" v-model="jimakuOutline" type="checkbox" name="outlineSw" class="switch is-rtl">
-                <label for="outlineSw" style="padding-left: 15px; padding-right: 53px; top: 8px;">Outline:</label>
-              </div>
             </div>
 
             <!-- LylicEditor -->
-            <input class="input" type="text" v-model="songId">
+            <input class="input" type="hidden" v-model="songId">
             <div class="paper">
               <div class="paper-content">
                   <textarea 
@@ -170,6 +141,11 @@
 "曲名 / アーティスト
 
 ここに歌詞を貼り付けます"></textarea>
+              </div>
+            </div>
+            <div>
+              <div style="text-align: right;">
+                <div class="button is-small is-danger is-inverted" @click="setJimakuIndex(0)"><i class="fas fa-trash-alt"> Delete</i></div>
               </div>
             </div>
             
