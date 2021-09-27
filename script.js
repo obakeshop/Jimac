@@ -1,11 +1,14 @@
-Vue.createApp({
+const vue = Vue.createApp({
   data() {
     return {
       items: [],
       index: 0,
       currentLylic: '',
       backColor: "#00FF00",
-      textColor: "#FF3399"
+      textColor: "#3333FF",
+      fontFamily: "'Kiwi Maru', serif",
+      fontSize: "42pt",
+      textAnim: true
     }
   },
   methods: {
@@ -17,10 +20,8 @@ Vue.createApp({
     setIndex(e) {
       const value = parseInt(e.target.value);
       if (!value || value < 0 || this.items.length < value) {
-        console.log(1)
         this.index = 0;
       } else {
-        console.log(2)
         this.index = value;
       }
     },
@@ -30,8 +31,29 @@ Vue.createApp({
       this.updateLylic();
     },
     updateLylic() {
-      this.currentLylic = this.items[this.index].lylic;
-      $("#lylic-test").addClass("lylic-style");
+      this.currentLylic = ""; 
+      setTimeout(() => {
+        this.currentLylic = this.items[this.index].lylic;
+        $("#lylic-test-after").addClass("lylic-style after");
+        $("#lylic-test-main").addClass("lylic-style main");
+        $("#lylic-test-before").addClass("lylic-style before");
+      }, 50);
+    },
+    keyEvent(event) {
+      const tagName = document.activeElement.tagName; 
+      if (tagName === "TEXTAREA" || tagName === "INPUT") {
+        return;
+      }
+      switch (event.keyCode) {
+        case 37: this.moveIndex(-1); break;
+        case 39: this.moveIndex(+1); break;
+      }
+    }
+  },
+  filters: {
+    cnvSpace: function (t) {
+      console.log(t);
+      return t;
     }
   },
   mounted: function () {
@@ -40,4 +62,8 @@ Vue.createApp({
       this.changeLylics();
     })
   },
-}).mount('#v-model-textarea')
+}).mount('#jimakuGenerator')
+
+$(window).keydown(function(event){
+  vue.keyEvent(event);
+});

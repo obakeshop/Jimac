@@ -1,23 +1,64 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css";
-@import url('https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yusei+Magic&family=DotGothic16&family=Hachi+Maru+Pop&family=Kaisei+Tokumin:wght@800&family=Kiwi+Maru:wght@300;500&display=swap');
+
+html {
+  height: 100%;
+}
 
 body{
+  font-family: 'Yusei Magic', sans-serif;
+  background-color: #ececec;
+  height: 100%;
+}
+
+section, #jimakuGenerator{
+}
+
+.columns {
+}
+
+.column {
+  display: flex;
+  height: 100%;
+}
+
+.column.sidebar {
+  width: 220px;
+  min-width: 220px;
+  max-width: 220px;
+  background: darkgrey;
+  height: 100%;
+}
+
+.column.content {
+  width: 100%;
+  background: lightgrey;
+}
+
+
+h1 {
+  font-family: 'Kiwi Maru', serif;
+  font-weight: 300 !important;
+  padding-left: 10px;
+}
+
+input {
   font-family: 'Yusei Magic', sans-serif;
 }
 
 .lylic-area {
   width: 100%;
-  height: 15vw;
+  height: 150px;
 }
 
-/****** TextArea Style ******/
+/****** TextArea ******/
 
 .paper {
   position: relative;
   width: 100%;
   min-width: 400px;
-  height: 480px;
-  margin: 0 auto 0px auto;
+  height: 450px;
+  margin: 10px auto 5px auto;
   background: #fafafa;
   border-radius: 10px;
   box-shadow: 0 2px 3px rgba(0,0,0,.2);
@@ -28,9 +69,9 @@ body{
   position: absolute;
   top: 0; bottom: 0; left: 0;
   width: 60px;
-  background: radial-gradient(#83817e 6px, transparent 7px) repeat-y;
+  background: radial-gradient(#bebebe 6px, transparent 7px) repeat-y;
   background-size: 30px 30px;
-  border-right: 3px solid #1f5a9e;
+  border-right: 3px solid #586f88;
   box-sizing: border-box;
 }
 
@@ -58,27 +99,39 @@ body{
   z-index: 1;
 }
 
-/****** Lylic Style ******/
+/****** Repertory ******/
 
-.lylic-style{
-  display: inline-block;
-  position: relative;
-  font-size: 6vw;
-  font-family: 'Yusei Magic', sans-serif;
+.repertory{
+  font-family: 'Kiwi Maru', serif;
+}
+
+/****** Lylic ******/
+
+.lylic-area {
+  margin-top: 0px;
+}
+
+.lylic-style.main{
   -webkit-text-stroke-width: 1.6vw;
 }
-.lylic-style::after{
-  content: attr(data-text);
+.lylic-style.after{
   position: absolute;
   color: #fff;
-  left: 0;
   -webkit-text-stroke-width: 1vw;
   z-index: 20;
 }
-.lylic-style::before{
-  content: attr(data-text);
+.lylic-style.before{
   position: absolute;
-  left: 0;
   -webkit-text-stroke-width: 0vw;
   z-index: 30;
+}
+
+/****** Anim Check ******/
+
+.switch[type=checkbox]+label::before{
+  top:5px !important;
+}
+
+.switch[type=checkbox]+label::after{
+  top:9px !important;
 }
