@@ -33,13 +33,28 @@
 
         <!-- Repertory -->
         <div class="column sidebar">
-          
           <div class="repertory">
 
             <div class="card song">
               <div class="card-content">
                 <div class="content">
-                  Lemon / 米津玄師
+                  曲名 / アーティスト
+                </div>
+              </div>
+            </div>
+            
+            <div class="card song">
+              <div class="card-content">
+                <div class="content">
+                  曲名 / アーティスト
+                </div>
+              </div>
+            </div>
+            
+            <div class="card song">
+              <div class="card-content">
+                <div class="content">
+                  曲名 / アーティスト
                 </div>
               </div>
             </div>
@@ -53,7 +68,6 @@
             </div>
 
           </div>
-
         </div>
         
         <div class="column content">
@@ -103,15 +117,15 @@
               <div class="button" @click="setJimakuIndex(this.jimakuIndex+1)"><i class="fas fa-angle-right"></i></div>
 
               <!-- BackColor -->
-              <div class="button" style="border: none; background-color: transparent; padding-left: 15px; padding-right: 4px;">Back:</div>
+              <div class="button jimakuCtrl">Back:</div>
               <input class="input" style="width:44px;" type="color" v-model="jimakuBackColor" placeholder="#BackColor">
               
               <!-- TextColor -->
-              <div class="button" style="border: none; background-color: transparent; padding-left: 15px; padding-right: 4px;">Text:</div>
+              <div class="button jimakuCtrl">Text:</div>
               <input class="input" style="width:44px;" type="color" v-model="jimakuTextColor" placeholder="#TextColor">
               
               <!-- FontFamily -->
-              <div class="button" style="border: none; background-color: transparent; padding-left: 15px; padding-right: 4px;">Font:</div>
+              <div class="button jimakuCtrl">Font:</div>
               <div class="select">
                 <select name="fontFamily" style="width:170px;" v-model="jimakuFontFamily">
                   <option value="'Kiwi Maru', serif">Kiwi Maru</option>
@@ -123,13 +137,13 @@
               </div>
 
               <!-- FontSize -->
-              <div class="button" style="border: none; background-color: transparent; padding-left: 15px; padding-right: 4px;">Size:</div>
+              <div class="button jimakuCtrl">Size:</div>
               <input class="input" style="width:60px;" type="text" v-model="jimakuFontSize">
 
               <!-- Animation -->
               <div class="field" style="display: inline;">
-                <input id="switchRtlExample" v-model="jimakuAnim" type="checkbox" name="switchRtlExample" class="switch is-rtl" checked="checked">
-                <label for="switchRtlExample" style="padding-left: 15px; padding-right: 53px; top: 8px;">Animation:</label>
+                <input id="animSw" v-model="jimakuAnim" type="checkbox" name="animSw" class="switch is-rtl">
+                <label for="animSw" style="padding-left: 15px; padding-right: 53px; top: 8px;">Animation:</label>
               </div>
             </div>
 

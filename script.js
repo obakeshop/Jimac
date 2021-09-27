@@ -5,7 +5,6 @@ const vue = Vue.createApp({
       lylic: `曲名 / アーティスト
 
 ここに歌詞を貼り付けます`, // 歌詞
-      lylics: [], // 歌詞を行ごとに分解したデータ
       jimaku: '', // 字幕のテキスト
       jimakuIndex: 0, // 字幕の行番号
       jimakuBackColor: "#00FF00", // 字幕の背景色
@@ -17,6 +16,7 @@ const vue = Vue.createApp({
   },
 
   methods: {
+    
     loadSong(songId) { // データをローカルストレージから読込み
       if (localStorage.length) {
         this.lylic = localStorage.getItem(songId);
@@ -26,19 +26,14 @@ const vue = Vue.createApp({
 
     changeLylic() { // 歌詞が更新されたときに保存して画面更新
       localStorage.setItem(this.songId, this.lylic);
-      this.lylics = (this.lylic || '').split('\n');
       this.updateJimaku();
     },
 
+    getLylics() { return (this.lylic || '').split('\n'); },
+
     moveEditorCousor(e) { // エディター内で十字キーまたはエンターを押した時に字幕の行番号を更新
-      switch (e.keyCode) {
-        case 13: 
-        case 37: 
-        case 38: 
-        case 39: 
-        case 40: 
-          this.updateJimakuIndex();
-          break;
+      if ([13,37,38,39,40].includes(e.keyCode)) {
+        this.updateJimakuIndex();
       }
     },
 
@@ -47,11 +42,8 @@ const vue = Vue.createApp({
         return;
       }
 
-      if (!value || value < 0 || this.lylics.length-1 < value) {
-        this.jimakuIndex = 0;
-      } else {
-        this.jimakuIndex = value;
-      }
+      const invalid = v => !v || v < 0 || this.getLylics().length-1 < v;
+      this.jimakuIndex = invalid(value) ? 0 : value;
       this.updateJimaku();
     },
 
@@ -60,8 +52,7 @@ const vue = Vue.createApp({
         return;
       }
       const match = this.lylic.substr(0, document.activeElement.selectionStart).match(/\n/g);
-      const jimakuIndex = match ? match.length : 0;
-      this.setJimakuIndex(jimakuIndex);
+      this.setJimakuIndex(match ? match.length : 0);
     },
 
     updateJimaku() { // 字幕の更新
@@ -69,7 +60,7 @@ const vue = Vue.createApp({
         this.jimaku = ""; // Reset animation
       }
       setTimeout(() => {
-        this.jimaku = this.lylics[this.jimakuIndex];
+        this.jimaku = this.getLylics()[this.jimakuIndex];
         $("#jimaku-0").addClass("jimaku-0");
         $("#jimaku-1").addClass("jimaku-1");
         $("#jimaku-2").addClass("jimaku-2");
@@ -87,16 +78,17 @@ const vue = Vue.createApp({
         case 39: this.setJimakuIndex(this.jimakuIndex+1); break;
       }
     },
-
   },
+
   mounted: function () { // ウィンドウ読込み時の初期化
-    this.$nextTick(function () {
+    this.$nextTick(function() {
       this.loadSong(this.songId);
     })
   },
+
 }).mount('#jimakuGenerator');
 
 // ショートカットキー用のイベント取得
-$(window).keyup(function(event){
+$(window).keyup(function(event) {
   vue.windowKeyEvent(event);
 });
