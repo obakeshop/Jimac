@@ -58,9 +58,10 @@ const vue = Vue.createApp({
         }
 
       } else {
+        console.log(1);
         switch (event.keyCode) {
-          case 37: this.moveIndex(-1); break;
-          case 39: this.moveIndex(+1); break;
+          case 37: this.setIndex(this.index-1); break;
+          case 39: this.setIndex(this.index+1); break;
         }
       }
     },
