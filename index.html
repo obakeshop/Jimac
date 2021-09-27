@@ -20,7 +20,7 @@
 
   <section>
     <div id="jimakuGenerator" class="container" >
-      <div class="columns is-mobile"  >
+      <div class="columns is-mobile">
 
         <!-- Repertory -->
         <div class="column sidebar">
@@ -105,10 +105,10 @@
             <div id="controller">
 
               <!-- LylicIndex -->
-              <div class="button" @click="moveIndex(-1000)"><i class="fas fa-angle-double-left"></i></div>
-              <div class="button" @click="moveIndex(-1)"><i class="fas fa-angle-left"></i></div>
+              <div class="button" @click="setIndex(0)"><i class="fas fa-angle-double-left"></i></div>
+              <div class="button" @click="setIndex(this.index-1)"><i class="fas fa-angle-left"></i></div>
               <div class="button" style="width:44px; background-color: rgb(255,255,255,0.5);">{{index}}</div>
-              <div class="button" @click="moveIndex(+1)"><i class="fas fa-angle-right"></i></div>
+              <div class="button" @click="setIndex(this.index+1)"><i class="fas fa-angle-right"></i></div>
 
               <!-- BackColor -->
               <div class="button" style="border: none; background-color: transparent; padding-left: 15px; padding-right: 4px;">Back:</div>
@@ -137,7 +137,7 @@
               <!-- Animation -->
               <div class="field" style="display: inline;">
                 <input id="switchRtlExample" v-model="textAnim" type="checkbox" name="switchRtlExample" class="switch is-rtl" checked="checked">
-                <label for="switchRtlExample" style="padding-left: 15px; padding-right: 53px; top: 8px;">Anim:</label>
+                <label for="switchRtlExample" style="padding-left: 15px; padding-right: 53px; top: 8px;">Animation:</label>
               </div>
             </div>
 
@@ -145,10 +145,13 @@
             <div class="paper">
               <div class="paper-content">
                   <textarea 
+                    id="lylics"
                     autofocus
                     contenteditable 
                     v-model="lylics" 
-                    @input="changeLylics" 
+                    @input="changeLylics"
+                    @focus="updateIndex"
+                    @click="updateIndex" 
                     placeholder=
 "曲名 / アーティスト
 
