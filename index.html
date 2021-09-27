@@ -28,10 +28,9 @@
 </head>
 
 <body>
-  <h1 class="title">歌枠字幕ジェネレーター</h1>
-
   <section>
     <div class="container">
+      <h1 class="title">歌枠字幕ジェネレーター</h1>
       <div class="columns is-mobile">
 
         <!-- Repertory -->
@@ -63,7 +62,7 @@
               </component>
               
               <!-- Jimaku anim CSS (Toggle) -->
-              <component v-if="jimakuAnim" is="style">
+              <component v-if="jimakuAnim !== 'none'" is="style">
                 @keyframes text-in {
                   0% {
                     transform: translate(0, -20px);
@@ -76,9 +75,9 @@
                 }
               </component>
               
-              <div v-show="jimakuOutline" id="jimaku-0"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: i*100+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
-              <div v-show="jimakuOutline" id="jimaku-1"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: i*100+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
-              <div id="jimaku-2"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: i*100+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
+              <div v-show="jimakuOutline" id="jimaku-0"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*100)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
+              <div v-show="jimakuOutline" id="jimaku-1"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*100)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
+              <div id="jimaku-2"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*100)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
             </button>
 
             <div id="controller">
@@ -113,16 +112,20 @@
               <div class="button jimakuCtrl">Size:</div>
               <input class="input" style="width:60px;" type="text" v-model="jimakuFontSize">
 
+              <!-- Animation -->
+              <div class="button jimakuCtrl">Anim:</div>
+              <div class="select">
+                <select style="width:92px;" v-model="jimakuAnim">
+                  <option value="none">none</option>
+                  <option value="fall">fall</option>
+                  <option value="Stairs">Stairs</option>
+                </select>
+              </div>
+
               <!-- Outline -->
               <div class="field" style="display: inline;">
                 <input id="outlineSw" v-model="jimakuOutline" type="checkbox" name="outlineSw" class="switch is-rtl">
                 <label for="outlineSw" style="padding-left: 15px; padding-right: 53px; top: 8px;">Outline:</label>
-              </div>
-
-              <!-- Animation -->
-              <div class="field" style="display: inline;">
-                <input id="animSw" v-model="jimakuAnim" type="checkbox" name="animSw" class="switch is-rtl">
-                <label for="animSw" style="padding-left: 15px; padding-right: 53px; top: 8px;">Animation:</label>
               </div>
               
             </div>
