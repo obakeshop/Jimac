@@ -11,7 +11,8 @@ const vue = Vue.createApp({
       jimakuTextColor: "#3333FF", // 字幕のテキストカラー
       jimakuFontFamily: "'Kiwi Maru', serif", // 字幕フォントファミリー
       jimakuFontSize: "42pt", // 字幕フォントサイズ
-      jimakuAnim: false // 字幕をアニメーションさせるか
+      jimakuAnim: false, // 字幕をアニメーションさせるか
+      jimakuOutline: true, // 字幕の縁取り
     }
   },
 

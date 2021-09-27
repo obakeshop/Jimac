@@ -102,9 +102,9 @@
                   animation: text-in .8s cubic-bezier(0.22, 0.15, 0.25, 1.43) 0s backwards;
                 }
               </component>
-
-              <div id="jimaku-0"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: i*100+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
-              <div id="jimaku-1"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: i*100+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
+              
+              <div v-show="jimakuOutline" id="jimaku-0"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: i*100+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
+              <div v-show="jimakuOutline" id="jimaku-1"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: i*100+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
               <div id="jimaku-2"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: i*100+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
             </div>
 
@@ -144,6 +144,12 @@
               <div class="field" style="display: inline;">
                 <input id="animSw" v-model="jimakuAnim" type="checkbox" name="animSw" class="switch is-rtl">
                 <label for="animSw" style="padding-left: 15px; padding-right: 53px; top: 8px;">Animation:</label>
+              </div>
+              
+              <!-- Outline -->
+              <div class="field" style="display: inline;">
+                <input id="outlineSw" v-model="jimakuOutline" type="checkbox" name="outlineSw" class="switch is-rtl">
+                <label for="outlineSw" style="padding-left: 15px; padding-right: 53px; top: 8px;">Outline:</label>
               </div>
             </div>
 
