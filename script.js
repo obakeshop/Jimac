@@ -2,7 +2,9 @@ const vue = Vue.createApp({
   data() {
     return {
       songId: 1, // 曲ID
-      lylic: '', // 歌詞
+      lylic: `曲名 / アーティスト
+
+ここに歌詞を貼り付けます`, // 歌詞
       lylics: [], // 歌詞を行ごとに分解したデータ
       jimaku: '', // 字幕のテキスト
       jimakuIndex: 0, // 字幕の行番号
@@ -16,11 +18,13 @@ const vue = Vue.createApp({
 
   methods: {
     loadSong(songId) { // データをローカルストレージから読込み
-      this.lylic = localStorage.getItem(songId);
-      this.changeLylic();
+      if (localStorage.length) {
+        this.lylic = localStorage.getItem(songId);
+        this.changeLylic();
+      }
     },
 
-    changeLylic(e) { // 歌詞が更新されたときに保存して画面更新
+    changeLylic() { // 歌詞が更新されたときに保存して画面更新
       localStorage.setItem(this.songId, this.lylic);
       this.lylics = (this.lylic || '').split('\n');
       this.updateJimaku();
@@ -87,6 +91,7 @@ const vue = Vue.createApp({
   },
   mounted: function () { // ウィンドウ読込み時の初期化
     this.$nextTick(function () {
+      this.changeLylic();
       this.loadSong(this.songId);
     })
   },
