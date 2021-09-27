@@ -87,6 +87,16 @@ const jimakuGenerator = Vue.createApp({
       }
     },
 
+    deleteSong() { // データ消去
+      let songs = JSON.parse(localStorage.getItem("songs")).filter( e => {
+        return e.id !== this.songId;
+      });
+      localStorage.setItem("songs", JSON.stringify(songs));
+      localStorage.removeItem(this.sondId);
+      repertory.load();
+      repertory.select(songs[0].id);
+    },
+
     createSong() { // データ新規作成
       this.save(
         Date.now(), 
