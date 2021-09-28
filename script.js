@@ -34,7 +34,7 @@ const jimakuGenerator = Vue.createApp({
     loadSong(songId) { // データをローカルストレージから読込み
       this.songId = songId
       this.lyric = localStorage.getItem(songId);
-      document.getElementById('lyric').selectionStart = 0;
+      this.getLyricCorsor() = 0;
       this.changelyric();
     },
     
@@ -70,24 +70,7 @@ const jimakuGenerator = Vue.createApp({
     },
 
     getlyrics() { return (this.lyric || '').split('\n'); },
-
-    setJimakuIndex(value) { // 字幕行番号の変更→字幕更新
-      if (this.jimakuIndex === value) {
-        return;
-      }
-
-      const invalid = v => !v || v < 0 || this.getlyrics().length-1 < v;
-      this.jimakuIndex = invalid(value) ? 0 : value;
-      this.updateJimaku();
-    },
-
-    updateJimakuIndex() { // 字幕行番号をカーソルの位置に更新
-      if (document.activeElement.tagName !== "TEXTAREA") {
-        return;
-      }
-      const match = this.lyric.substr(0, document.activeElement.selectionStart).match(/\n/g);
-      this.setJimakuIndex(match ? match.length : 0);
-    },
+    getLyricCorsor() { return document.getElementById('lyric').selectionStart; },
 
     updateJimaku() { // 字幕の更新
       if (this.jimakuAnim) {
@@ -99,6 +82,25 @@ const jimakuGenerator = Vue.createApp({
         $("#jimaku-1").addClass("jimaku-1");
         $("#jimaku-2").addClass("jimaku-2");
       }, 50); // Animation waiting
+    },
+
+    setJimakuIndex(value) { // 字幕行番号の変更
+      if (this.jimakuIndex !== value) {
+        const invalid = v => !v || v < 0 || this.getlyrics().length-1 < v;
+        this.jimakuIndex = invalid(value) ? 0 : value;
+        this.updateJimaku();
+      }
+    },
+
+    updateJimakuIndex() { // 字幕行番号をカーソルの位置に更新 #lyric@focus@click
+      const match = this.lyric.substr(0, this.getLyricCorsor()).match(/\n/g);
+      this.setJimakuIndex(match ? match.length : 0);
+    },
+
+    moveEditorCousor(e) { // 字幕の行番号を更新 #lyric@keyup
+      if ([13,37,38,39,40].includes(e.keyCode)) { // 十字キーまたはエンターを押した時
+        this.updateJimakuIndex();
+      }
     },
 
     deleteSong() { // データ消去
@@ -114,12 +116,6 @@ const jimakuGenerator = Vue.createApp({
 
       this.loadRepertory();
       this.selectSong(songs[0]);
-    },
-
-    moveEditorCousor(e) { // エディター内で十字キーまたはエンターを押した時に字幕の行番号を更新
-      if ([13,37,38,39,40].includes(e.keyCode)) {
-        this.updateJimakuIndex();
-      }
     },
     
     windowKeyEvent(event) { // ショートカットキー制御
