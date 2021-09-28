@@ -61,6 +61,7 @@ const jimakuGenerator = Vue.createApp({
 
       this.loadRepertory();
       this.selectSong(this.songId);
+      return this.songId;
     },
 
     changelyric() { // 歌詞が更新されたときに保存して画面更新
@@ -111,9 +112,9 @@ const jimakuGenerator = Vue.createApp({
       localStorage.removeItem(this.songId);
 
       if (!songs.length) { // 全部消しちゃったら１個新規で作る
-        this.createSong();
+        songs.push(this.createSong());
       }
-
+      
       this.loadRepertory();
       this.selectSong(songs[0]);
       this.updateJimaku();
