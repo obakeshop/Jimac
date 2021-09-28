@@ -34,7 +34,7 @@ const jimakuGenerator = Vue.createApp({
     loadSong(songId) { // データをローカルストレージから読込み
       this.songId = songId
       this.lyric = localStorage.getItem(songId);
-      this.getLyricCorsor() = 0;
+      $('#lyric').prop('selectionStart', 0); 
       this.changelyric();
     },
     
@@ -70,7 +70,6 @@ const jimakuGenerator = Vue.createApp({
     },
 
     getlyrics() { return (this.lyric || '').split('\n'); },
-    getLyricCorsor() { return document.getElementById('lyric').selectionStart; },
 
     updateJimaku() { // 字幕の更新
       if (this.jimakuAnim) {
@@ -93,7 +92,7 @@ const jimakuGenerator = Vue.createApp({
     },
 
     updateJimakuIndex() { // 字幕行番号をカーソルの位置に更新 #lyric@focus@click
-      const match = this.lyric.substr(0, this.getLyricCorsor()).match(/\n/g);
+      const match = this.lyric.substr(0, $('#lyric').prop('selectionStart')).match(/\n/g);
       this.setJimakuIndex(match ? match.length : 0);
     },
 
