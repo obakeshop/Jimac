@@ -6,9 +6,10 @@ const jimakuGenerator = Vue.createApp({
   data() {
     return {
       repertory: [], // レパートリー
-      songId: 1, // 曲ID
+      target: 1, // 曲ID
       lyric: '', // 歌詞
-      jimaku: '', // 字幕のテキスト
+      jimaku: '', // 字幕テキスト
+      jimakuNext: '', // 次の字幕テキスト
       jimakuIndex: 0, // 字幕の行番号
       jimakuBackColor: "#00FF00", // 字幕の背景色
       jimakuTextColor: "#3333FF", // 字幕のテキストカラー
@@ -16,32 +17,31 @@ const jimakuGenerator = Vue.createApp({
       jimakuFontSize: "42pt", // 字幕フォントサイズ
       jimakuAnim: "none", // 字幕をアニメーションさせるか
       jimakuOutline: true, // 字幕の縁取り
+      preview: false, // プレビューモード
+      filter: '', // レパートリー検索条件
+      movieUrl: '', // 動画URL
     }
   },
 
   methods: {
 
     loadRepertory() { // レパートリーを最新状態にする
-      const getTitle = (songId) => {
-        const title = localStorage.getItem(songId).split('\n')[0];
-        return title.length <= 13 ? title : title.substr(0, 13) + '...';
-      };
       this.repertory = JSON.parse(localStorage.getItem("songs")).map( id => {
-        return { id, title: getTitle(id) }; 
+        return { id, title: localStorage.getItem(id).split('\n')[0], tags: localStorage.getItem(id) }; 
       });
     },
     
     loadSong(songId) { // データをローカルストレージから読込み
-      this.songId = songId
+      this.target = songId;
       this.lyric = localStorage.getItem(songId);
       $('#lyric').prop('selectionStart', 0); 
       this.changelyric();
     },
     
     saveSong(songId, lyric) {
-      this.songId = songId;
+      this.target = songId;
       this.lyric = lyric;
-      localStorage.setItem(this.songId, this.lyric);
+      localStorage.setItem(this.target, this.lyric);
     },
     
     selectSong(id) { // 指定した曲を表示し、選択状態にする
@@ -51,21 +51,21 @@ const jimakuGenerator = Vue.createApp({
     },
 
     createSong() { // データ新規作成
-      this.songId = Date.now();
+      this.target = Date.now();
       this.lyric = lyricTemplate;
-      localStorage.setItem(this.songId, this.lyric);
+      localStorage.setItem(this.target, this.lyric);
 
       let songs = JSON.parse(localStorage.getItem("songs")) || [];
-      songs.push(this.songId);
+      songs.push(this.target);
       localStorage.setItem("songs", JSON.stringify(songs));
 
       this.loadRepertory();
-      this.selectSong(this.songId);
-      return this.songId;
+      this.selectSong(this.target);
+      return this.target;
     },
 
     changelyric() { // 歌詞が更新されたときに保存して画面更新
-      localStorage.setItem(this.songId, this.lyric);
+      localStorage.setItem(this.target, this.lyric);
       this.updateJimaku();
       this.loadRepertory();
     },
@@ -78,6 +78,7 @@ const jimakuGenerator = Vue.createApp({
       }
       setTimeout(() => {
         this.jimaku = this.getlyrics()[this.jimakuIndex];
+        this.jimakuNext = this.getlyrics()[this.jimakuIndex+1];
         $("#jimaku-0").addClass("jimaku-0");
         $("#jimaku-1").addClass("jimaku-1");
         $("#jimaku-2").addClass("jimaku-2");
@@ -104,12 +105,17 @@ const jimakuGenerator = Vue.createApp({
     },
 
     deleteSong() { // データ消去
+
+      if (this.lyric !== lyricTemplate && !confirm('本当に消去しますか？')) {
+        return;
+      }
+
       // 削除対象のデータをフィルタして上書き保存
       let songs = JSON.parse(localStorage.getItem("songs")).filter( id => {
-        return id !== this.songId;
+        return id !== this.target;
       });
       localStorage.setItem("songs", JSON.stringify(songs));
-      localStorage.removeItem(this.songId);
+      localStorage.removeItem(this.target);
 
       if (!songs.length) { // 全部消しちゃったら１個新規で作る
         songs.push(this.createSong());
@@ -118,6 +124,24 @@ const jimakuGenerator = Vue.createApp({
       this.loadRepertory();
       this.selectSong(songs[0]);
       this.updateJimaku();
+    },
+
+    movieUrlRefresh() {
+      const backup = this.movieUrl;
+      const nicoElement = document.getElementById('nico');
+      this.movieUrl = "";
+      nicoElement.innerHTML = "";
+      setTimeout(() => {
+        this.movieUrl = backup;
+        // niconico は scriptタグでvueコンポーネントにできないので手動追加
+        if (this.movieUrl.indexOf('nico') !== -1) {
+          const nicoId = this.movieUrl.match(/(?:sm|nm|so|ca|ax|yo|nl|ig|na|cw|z[a-e]|om|sk|yk)\d{1,14}\b/)[0];
+          const script = document.createElement('script');
+          script.setAttribute('type', 'application/javascript');
+          script.setAttribute('src', `https://embed.nicovideo.jp/watch/${nicoId}/script?w=408&h=230`);
+          nicoElement.appendChild(script);
+        }
+      }, 50); // Refresh delay
     },
     
     windowKeyEvent(event) { // ショートカットキー制御

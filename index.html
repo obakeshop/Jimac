@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>歌枠字幕ジェネレータ</title>
+  <title>Jima9 - 歌枠字幕ジェネレータ</title>
 
   <!-- Vue -->
   <script src="https://unpkg.com/vue@next"></script>
@@ -29,133 +29,202 @@
 
 <body>
   <section>
-    <div id="jimakuGenerator" class="container">
-      <h1 class="title">歌枠字幕ジェネレータ</h1>
-      <div class="columns is-mobile">
+    <div id="jimakuGenerator" class="container is-fullhd">
+      <h1 class="title">Jima9 - 歌枠字幕ジェネレータ</h1>
+      <div id="jimakuPane" class="section">
 
-        <!-- Repertory -->
-        <div class="column sidebar">
-          <div class="repertory">
-            <div v-for="song in repertory" class="button" style="width: 100%; margin-bottom: 5px;" @click="selectSong(song.id)">{{ song.title }}</div>
-            <div class="button" style="width: 100%; margin-bottom: 5px;" @click="createSong">新規追加＋</div>
-
-          </div>
+        <!-- Next Jimaku -->
+        <div v-show="preview" class="has-text-centered is-fullwidth next is-size-5" @click="setJimakuIndex(this.jimakuIndex+1)">
+          {{ jimakuNext }}
         </div>
+
+        <!-- Jimaku -->
+        <button id="jimaku" class="button jimaku-area" :data-clipboard-text="jimaku">
+
+          <!-- text CSS -->
+          <component is="style">
+            .jimaku-area {
+              background-color: {{ jimakuBackColor }};
+            }
+            .jimaku{
+              font-size: {{ jimakuFontSize }};
+              font-family: {{ jimakuFontFamily }};
+            }
+            .jimaku-0,.jimaku-2{
+              color: {{ jimakuTextColor }};
+            }
+          </component>
+          
+          <!-- anim CSS (Toggle) -->
+          <component v-if="jimakuAnim !== 'none'" is="style">
+            @keyframes text-in {
+              0% {
+                transform: translate(0, -20px);
+                opacity: 0;
+              }
+            }
+            .item {
+              display: inline-block;
+              animation: text-in .8s cubic-bezier(0.22, 0.15, 0.25, 1.43) 0s backwards;
+            }
+          </component>
+          
+          <div v-show="jimakuOutline" id="jimaku-0"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*80)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
+          <div v-show="jimakuOutline" id="jimaku-1"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*80)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
+          <div id="jimaku-2"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*80)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
+        </button>
         
-        <div class="column content">
-          <div style="width:100%;">
+        <div id="jimakuController">
 
-            <button id="jimaku" class="button jimaku-area" :data-clipboard-text="jimaku">
+          <!-- JimakuIndex -->
+          <div class="button" @click="setJimakuIndex(0)"><i class="fas fa-angle-double-left"></i></div>
+          <div class="button" @click="setJimakuIndex(this.jimakuIndex-1)"><i class="fas fa-angle-left"></i></div>
+          <div class="button" style="width:44px; background-color: rgb(255,255,255,0.5);">{{jimakuIndex}}</div>
+          <div class="button" @click="setJimakuIndex(this.jimakuIndex+1)"><i class="fas fa-angle-right"></i></div>
 
-              <!-- Jimaku text CSS -->
-              <component is="style">
-                .jimaku-area {
-                  background-color: {{ jimakuBackColor }};
-                }
-                .jimaku{
-                  font-size: {{ jimakuFontSize }};
-                  font-family: {{ jimakuFontFamily }};
-                }
-                .jimaku-0,.jimaku-2{
-                  color: {{ jimakuTextColor }};
-                }
-              </component>
-              
-              <!-- Jimaku anim CSS (Toggle) -->
-              <component v-if="jimakuAnim !== 'none'" is="style">
-                @keyframes text-in {
-                  0% {
-                    transform: translate(0, -20px);
-                    opacity: 0;
-                  }
-                }
-                .item {
-                  display: inline-block;
-                  animation: text-in .8s cubic-bezier(0.22, 0.15, 0.25, 1.43) 0s backwards;
-                }
-              </component>
-              
-              <div v-show="jimakuOutline" id="jimaku-0"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*80)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
-              <div v-show="jimakuOutline" id="jimaku-1"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*80)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
-              <div id="jimaku-2"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*80)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
-            </button>
+          <!-- BackColor -->
+          <div class="button jimakuCtrl">Back:</div>
+          <input class="input" style="width:44px;" type="color" v-model="jimakuBackColor" placeholder="#BackColor">
+          
+          <!-- TextColor -->
+          <div class="button jimakuCtrl">Text:</div>
+          <input class="input" style="width:44px;" type="color" v-model="jimakuTextColor" placeholder="#TextColor">
+          
+          <!-- FontFamily -->
+          <div class="button jimakuCtrl">Font:</div>
+          <div class="select">
+            <select name="fontFamily" style="width:170px;" v-model="jimakuFontFamily">
+              <option value="'Kiwi Maru', serif">Kiwi Maru</option>
+              <option value="'Yusei Magic', sans-serif">Yusei Magic</option>
+              <option value="'Hachi Maru Pop', cursive">Hachi Maru Pop</option>
+              <option value="'Kaisei Tokumin', serif">Kaisei Tokumin</option>
+              <option value="'DotGothic16', sans-serif">DotGothic16</option>
+            </select>
+          </div>
 
-            <div id="controller">
+          <!-- FontSize -->
+          <div class="button jimakuCtrl">Size:</div>
+          <input class="input" style="width:60px;" type="text" v-model="jimakuFontSize">
 
-              <!-- JimakuIndex -->
-              <div class="button" @click="setJimakuIndex(0)"><i class="fas fa-angle-double-left"></i></div>
-              <div class="button" @click="setJimakuIndex(this.jimakuIndex-1)"><i class="fas fa-angle-left"></i></div>
-              <div class="button" style="width:44px; background-color: rgb(255,255,255,0.5);">{{jimakuIndex}}</div>
-              <div class="button" @click="setJimakuIndex(this.jimakuIndex+1)"><i class="fas fa-angle-right"></i></div>
+          <!-- Animation -->
+          <div class="button jimakuCtrl">Animation:</div>
+          <div class="select">
+            <select style="width:92px;" v-model="jimakuAnim">
+              <option value="none">none</option>
+              <option value="fall">fall</option>
+              <option value="Stairs">Stairs</option>
+            </select>
+          </div>
 
-              <!-- BackColor -->
-              <div class="button jimakuCtrl">Back:</div>
-              <input class="input" style="width:44px;" type="color" v-model="jimakuBackColor" placeholder="#BackColor">
-              
-              <!-- TextColor -->
-              <div class="button jimakuCtrl">Text:</div>
-              <input class="input" style="width:44px;" type="color" v-model="jimakuTextColor" placeholder="#TextColor">
-              
-              <!-- FontFamily -->
-              <div class="button jimakuCtrl">Font:</div>
-              <div class="select">
-                <select name="fontFamily" style="width:170px;" v-model="jimakuFontFamily">
-                  <option value="'Kiwi Maru', serif">Kiwi Maru</option>
-                  <option value="'Yusei Magic', sans-serif">Yusei Magic</option>
-                  <option value="'Hachi Maru Pop', cursive">Hachi Maru Pop</option>
-                  <option value="'Kaisei Tokumin', serif">Kaisei Tokumin</option>
-                  <option value="'DotGothic16', sans-serif">DotGothic16</option>
-                </select>
+          <!-- Outline -->
+          <div class="field" style="display: inline;">
+            <input id="outlineSw" v-model="jimakuOutline" type="checkbox" name="outlineSw" class="switch is-rtl">
+            <label for="outlineSw" style="padding-left: 15px; padding-right: 53px; top: 8px;">Outline:</label>
+          </div>
+          
+          <!-- Outline -->
+          <div class="field" style="display: inline;">
+            <input id="previewSw" v-model="preview" type="checkbox" name="previewSw" class="switch is-rtl">
+            <label for="previewSw" style="padding-left: 15px; padding-right: 53px; top: 8px;">Preview:</label>
+          </div>
+          
+        </div>
+
+      </div>
+
+      <div id="editorPane" class="section">
+
+        <div class="tile is-ancestor">
+          <div class="tile is-vertical is-12">
+            <div class="tile">
+              <div class="tile is-parent is-3 is-vertical repertory">
+
+                <div class="tile is-child notification" style="margin-bottom: .75rem !important;">
+
+                  <!-- Search -->
+                  <div class="field">
+                    <div class="control has-icons-left has-icons-right">
+                      <input class="input is-small" type="text" v-model="filter" placeholder="Search in Title or Tags" tabindex="-1">
+                      <span class="icon is-small is-left">
+                        <i class="fas fa-search"></i>
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <!-- Repertory -->
+                  <div v-show="(song.title+song.tags).indexOf(filter) > -1" v-for="song in repertory" class="button is-info is-light" :class="{ 'is-active': song.id === target }" @click="selectSong(song.id)">{{ song.title.length <= 20 ? song.title : song.title.substr(0, 20) + '...' }}</div>
+                  <div class="button is-info is-light" @click="createSong">＋新規追加＋</div>
+                </div>
+
+                <div><a class="button tile notification banner1" href="https://okurisae.github.io/off-vocal-finder/" target="_blank"></a></div>
+
               </div>
 
-              <!-- FontSize -->
-              <div class="button jimakuCtrl">Size:</div>
-              <input class="input" style="width:60px;" type="text" v-model="jimakuFontSize">
+              <div class="tile is-parent is-5" style="padding-left: 0; padding-right: 0;">
+                <article class="tile is-child is-info">
 
-              <!-- Animation -->
-              <div class="button jimakuCtrl">Anim:</div>
-              <div class="select">
-                <select style="width:92px;" v-model="jimakuAnim">
-                  <option value="none">none</option>
-                  <option value="fall">fall</option>
-                  <option value="Stairs">Stairs</option>
-                </select>
-              </div>
+                  <!-- lyricEditor -->
+                  <input class="input" type="hidden" v-model="target">
+                  <div class="paper">
+                    <div class="paper-content">
+                        <textarea
+                          id="lyric"
+                          autofocus
+                          contenteditable 
+                          v-model="lyric" 
+                          @input="changelyric"
+                          @click="updateJimakuIndex"
+                          @keyup="moveEditorCousor"></textarea>
+                    </div>
+                  </div>
+                  
+                </article>
 
-              <!-- Outline -->
-              <div class="field" style="display: inline;">
-                <input id="outlineSw" v-model="jimakuOutline" type="checkbox" name="outlineSw" class="switch is-rtl">
-                <label for="outlineSw" style="padding-left: 15px; padding-right: 53px; top: 8px;">Outline:</label>
               </div>
-              
+              <div class="tile is-parent is-4 is-vertical">
+                <article class="tile is-child notification has-background-info-light settings">
+                  <div class="content">
+
+                      <!-- video -->
+                      <iframe v-if="movieUrl.indexOf('youtu') !== -1" 
+                        id="ytplayer" type="text/html" width="409" height="230"
+                        :src="`https://www.youtube.com/embed/${/[/?=]([-\w]{11})/.exec(movieUrl)[1]}`"
+                        frameborder="0" style="border-radius: 4px;"></iframe>
+
+                      <div id="nico"></div>
+
+                      <div class="field">
+                        <div class="control has-icons-left has-icons-right">
+                          <input class="input is-small" type="text" v-model="movieUrl" @input="movieUrlRefresh" placeholder="Movie URL (YouTube or niconico)">
+                          <span class="icon is-small is-left">
+                            <i class="fab fa-youtube"></i>
+                          </span>
+                        </div>
+                      </div>
+
+                      <!-- Tags -->
+                      <div class="field">
+                        <div class="control has-icons-left has-icons-right">
+                          <input class="input is-small" type="text" v-model="tags" placeholder="#tags">
+                          <span class="icon is-small is-left">
+                            <i class="fas fa-tags"></i>
+                          </span>
+                        </div>
+                      </div>
+
+                      <!-- Delete Button -->
+                      <div style="text-align: right;">
+                        <div class="button is-small is-danger is-outlined" @click="deleteSong"><i class="fas fa-trash-alt"> Delete</i></div>
+                      </div>
+
+                  </div>
+                </article>
+              </div>
             </div>
-
-            <!-- lyricEditor -->
-            <input class="input" type="hidden" v-model="songId">
-            <div class="paper">
-              <div class="paper-content">
-                  <textarea 
-                    id="lyric"
-                    autofocus
-                    contenteditable 
-                    v-model="lyric" 
-                    @input="changelyric"
-                    @click="updateJimakuIndex"
-                    @keyup="moveEditorCousor"
-                    placeholder=
-"曲名 / アーティスト
-
-ここに歌詞を貼り付けます"></textarea>
-              </div>
-            </div>
-            <div>
-              <div style="text-align: right;">
-                <div class="button is-small is-danger is-inverted" @click="deleteSong"><i class="fas fa-trash-alt"> Delete</i></div>
-              </div>
-            </div>
-            
           </div>
         </div>
+
+
       </div>
     </div>
   </section>
