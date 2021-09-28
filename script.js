@@ -103,6 +103,7 @@ const jimakuGenerator = Vue.createApp({
     },
 
     deleteSong() { // データ消去
+      // 削除対象のデータをフィルタして上書き保存
       let songs = JSON.parse(localStorage.getItem("songs")).filter( id => {
         return id !== this.songId;
       });
@@ -115,6 +116,7 @@ const jimakuGenerator = Vue.createApp({
 
       this.loadRepertory();
       this.selectSong(songs[0]);
+      this.updateJimaku();
     },
     
     windowKeyEvent(event) { // ショートカットキー制御
