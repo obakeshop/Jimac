@@ -29,20 +29,20 @@
 
 <body>
   <section>
-    <div class="container">
-      <h1 class="title">歌枠字幕ジェネレーター</h1>
+    <div id="jimakuGenerator" class="container">
+      <h1 class="title">歌枠字幕ジェネレータ</h1>
       <div class="columns is-mobile">
 
         <!-- Repertory -->
-        <div id="repertory" class="column sidebar">
+        <div class="column sidebar">
           <div class="repertory">
-            <div v-for="song in repertory" class="button" style="width: 100%; margin-bottom: 5px;" @click="select(song.id)">{{ song.title }}</div>
-            <div class="button" style="width: 100%; margin-bottom: 5px;" @click="addSong">新規追加＋</div>
+            <div v-for="song in repertory" class="button" style="width: 100%; margin-bottom: 5px;" @click="selectSong(song.id)">{{ song.title }}</div>
+            <div class="button" style="width: 100%; margin-bottom: 5px;" @click="createSong">新規追加＋</div>
 
           </div>
         </div>
         
-        <div id="jimakuGenerator" class="column content">
+        <div class="column content">
           <div style="width:100%;">
 
             <button id="jimaku" class="button jimaku-area" :data-clipboard-text="jimaku">
@@ -75,9 +75,9 @@
                 }
               </component>
               
-              <div v-show="jimakuOutline" id="jimaku-0"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*100)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
-              <div v-show="jimakuOutline" id="jimaku-1"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*100)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
-              <div id="jimaku-2"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*100)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
+              <div v-show="jimakuOutline" id="jimaku-0"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*80)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
+              <div v-show="jimakuOutline" id="jimaku-1"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*80)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
+              <div id="jimaku-2"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*80)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
             </button>
 
             <div id="controller">
