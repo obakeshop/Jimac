@@ -5,7 +5,7 @@
   <title>Jimak - 歌枠字幕ジェネレータ -</title>
 
   <!-- Vue -->
-  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 
   <!-- JQuery -->
   <script
@@ -34,12 +34,12 @@
       <div id="jimakuPane" class="section">
 
         <!-- Jimaku preview -->
-        <div v-show="preview" class="has-text-centered is-fullwidth next is-size-5">
-          {{ jimakuNext }}
+        <div v-if="preview" class="has-text-centered is-fullwidth next is-size-6" style="background-color: rgb(194, 194, 194); border-radius: 2px; height: 1.5rem;">
+          {{ previewText }}
         </div>
 
         <!-- Jimaku -->
-        <button id="jimaku" class="button jimaku-area" :data-clipboard-text="jimaku">
+        <button id="jimaku" class="button jimaku-area" :data-clipboard-text="jimaku" @mouseover="hint('クリックで表示中の歌詞をクリップボードにコピー')">
 
           <!-- text CSS -->
           <component is="style">
@@ -77,37 +77,47 @@
         <div id="jimakuController">
 
           <!-- JimakuIndex -->
-          <div class="button" @click="setJimakuIndex(0)"><i class="fas fa-angle-double-left"></i></div>
-          <div class="button" @click="setJimakuIndex(this.jimakuIndex-1)"><i class="fas fa-angle-left"></i></div>
-          <div class="button" style="width:44px; background-color: rgb(255,255,255,0.5);">{{jimakuIndex}}</div>
-          <div class="button" @click="setJimakuIndex(this.jimakuIndex+1)"><i class="fas fa-angle-right"></i></div>
+          <div class="is-inline">
+            <div class="button" @click="setJimakuIndex(0)" @mouseover="hint('歌詞先頭に戻ります')"><i class="fas fa-angle-double-left"></i></div>
+            <div class="button" @click="setJimakuIndex(this.jimakuIndex-1)" @mouseover="hint('歌詞を1つ前に戻します [←]')"><i class="fas fa-angle-left"></i></div>
+            <div class="button" style="width:44px; background-color: rgb(255,255,255,0.5);" @mouseover="hint(`${jimakuIndex}行目`)">{{jimakuIndex}}</div>
+            <div class="button" @click="setJimakuIndex(this.jimakuIndex+1)" @mouseover="hint('歌詞を1つ先に進めます [→]')"><i class="fas fa-angle-right"></i></div>
+          </div>
 
           <!-- BackColor -->
-          <div class="button jimakuCtrl">Back:</div>
-          <input class="input" style="width:44px;" type="color" v-model="jimakuBackColor" placeholder="#BackColor">
+          <div class="is-inline" @mouseover="hint('背景色を変更します')">
+            <div class="button jimakuCtrl">Back:</div>
+            <input class="input" style="width:44px;" type="color" v-model="jimakuBackColor" placeholder="#BackColor">
+          </div>
           
           <!-- TextColor -->
-          <div class="button jimakuCtrl">Text:</div>
-          <input class="input" style="width:44px;" type="color" v-model="jimakuTextColor" placeholder="#TextColor">
-          
+          <div class="is-inline" @mouseover="hint('字幕の文字色を変更します')">
+            <div class="button jimakuCtrl">Text:</div>
+            <input class="input" style="width:44px;" type="color" v-model="jimakuTextColor" placeholder="#TextColor">
+          </div>
+
           <!-- FontFamily -->
-          <div class="button jimakuCtrl">Font:</div>
-          <div class="select">
-            <select name="fontFamily" style="width:170px;" v-model="jimakuFontFamily">
-              <option value="'Kiwi Maru', serif">Kiwi Maru</option>
-              <option value="'Yusei Magic', sans-serif">Yusei Magic</option>
-              <option value="'Hachi Maru Pop', cursive">Hachi Maru Pop</option>
-              <option value="'Kaisei Tokumin', serif">Kaisei Tokumin</option>
-              <option value="'DotGothic16', sans-serif">DotGothic16</option>
-            </select>
+          <div class="is-inline" @mouseover="hint('字幕のフォントを変更します')">
+            <div class="button jimakuCtrl">Font:</div>
+            <div class="select">
+              <select name="fontFamily" style="width:170px;" v-model="jimakuFontFamily">
+                <option value="'Kiwi Maru', serif">Kiwi Maru</option>
+                <option value="'Yusei Magic', sans-serif">Yusei Magic</option>
+                <option value="'Hachi Maru Pop', cursive">Hachi Maru Pop</option>
+                <option value="'Kaisei Tokumin', serif">Kaisei Tokumin</option>
+                <option value="'DotGothic16', sans-serif">DotGothic16</option>
+              </select>
+            </div>
           </div>
 
           <!-- FontSize -->
-          <div class="button jimakuCtrl">Size:</div>
-          <input class="input" style="width:60px;" type="text" v-model="jimakuFontSize" @input="updateJimakuFontSize">
+          <div class="is-inline" @mouseover="hint('字幕のフォントサイズを変更します(曲ごとに保持されます)')">
+            <div class="button jimakuCtrl">Size:</div>
+            <input class="input" style="width:60px;" type="text" v-model="jimakuFontSize" @input="updateSong">
+          </div>
 
           <!-- Animation -->
-          <div class="button jimakuCtrl">Animation:</div>
+          <div class="button jimakuCtrl" @mouseover="hint('字幕にアニメーションを設定できます')">Animation:</div>
           <div class="select">
             <select style="width:92px;" v-model="jimakuAnim">
               <option value="none">none</option>
@@ -117,13 +127,13 @@
           </div>
 
           <!-- Outline -->
-          <div class="field" style="display: inline;">
+          <div class="field" style="display: inline;" @mouseover="hint('字幕を縁取り文字にします')">
             <input id="outlineSw" v-model="jimakuOutline" type="checkbox" name="outlineSw" class="switch is-rtl">
             <label for="outlineSw" style="padding-left: 15px; padding-right: 53px; top: 8px;">Outline:</label>
           </div>
           
-          <!-- Outline -->
-          <div class="field" style="display: inline;">
+          <!-- Preview -->
+          <div class="field" style="display: inline;" @mouseover="hint('字幕上部に1つ前の歌詞を表示します')">
             <input id="previewSw" v-model="preview" type="checkbox" name="previewSw" class="switch is-rtl">
             <label for="previewSw" style="padding-left: 15px; padding-right: 53px; top: 8px;">Preview:</label>
           </div>
@@ -142,7 +152,7 @@
                 <div class="tile is-child notification" style="margin-bottom: .75rem !important;">
 
                   <!-- Search -->
-                  <div class="field">
+                  <div class="field" @mouseover="hint('タイトルまたはタグで検索ができます')">
                     <div class="control has-icons-left has-icons-right">
                       <input class="input is-small" type="text" v-model="filter" placeholder="Search in title and tags" tabindex="-1">
                       <span class="icon is-small is-left">
@@ -152,13 +162,14 @@
                   </div>
                   
                   <!-- Repertory -->
-                  <div class="button is-small is-info is-light addsong" @click="createSong">＋新規作成＋</div>
+                  <div class="button is-small is-info is-light addsong" @click="createSong" @mouseover="hint('無料版は5曲まで追加できます')">＋新規作成＋</div>
                   <div class='tile is-child songs'>
                     <div v-show="(song.title+song.tags).indexOf(filter) > -1"
                       v-for="song in repertory" 
                       class="button is-info is-light song" 
-                      :class="{ 'is-active': song.id === target }" 
-                      @click="selectSong(song.id)">{{ song.title.length <= 16 ? song.title : song.title.substr(0, 16) + '...' }}</div>
+                      :class="{ 'is-active': song.id === selectedSong }" 
+                      @click="selectSong(song.id)"
+                      @mouseover="hint(`${song.title} ${song.tags}`)">{{ song.title.length <= 16 ? song.title : song.title.substr(0, 16) + '...' }}</div>
                   </div>
                 </div>
 
@@ -182,15 +193,14 @@
                 <article class="tile is-child is-info">
 
                   <!-- lyricEditor -->
-                  <input class="input" type="hidden" v-model="target">
-                  <div class="paper">
+                  <div class="paper" @mouseover="hint('歌詞を登録します（先頭行がタイトルになります）')">
                     <div class="paper-content">
                         <textarea
                           id="lyric"
                           autofocus
                           contenteditable 
                           v-model="lyric" 
-                          @input="changelyric"
+                          @input="updateSong"
                           @click="updateJimakuIndex"
                           @keyup="moveEditorCousor"></textarea>
                     </div>
@@ -211,9 +221,9 @@
 
                       <div id="nico"></div>
 
-                      <div class="field">
+                      <div class="field" @mouseover="hint('YouTubeまたはニコニコの動画を登録できます')">
                         <div class="control has-icons-left has-icons-right">
-                          <input class="input is-small" type="text" v-model="movieUrl" @input="updateMovieUrl" placeholder="Movie URL (YouTube or niconico)">
+                          <input class="input is-small" type="text" v-model="movieUrl" @input="updateSong" placeholder="Movie URL (YouTube or niconico)">
                           <span class="icon is-small is-left">
                             <i class="fab fa-youtube"></i>
                           </span>
@@ -221,9 +231,9 @@
                       </div>
 
                       <!-- Tags -->
-                      <div class="field">
+                      <div class="field" @mouseover="hint('検索に使えるタグを設定します')">
                         <div class="control has-icons-left has-icons-right">
-                          <input class="input is-small" type="text" v-model="tags" @input="updateTags" placeholder="#tags">
+                          <input class="input is-small" type="text" v-model="tags" @input="updateSong" placeholder="#tags">
                           <span class="icon is-small is-left">
                             <i class="fas fa-tags"></i>
                           </span>
@@ -231,7 +241,7 @@
                       </div>
 
                       <!-- Delete Button -->
-                      <div style="text-align: right;">
+                      <div style="text-align: right;" @mouseover="hint('選択中の曲を削除します')">
                         <div class="button is-small is-danger is-outlined" @click="deleteSong"><i class="fas fa-trash-alt"> Delete</i></div>
                       </div>
 
@@ -241,17 +251,63 @@
             </div>
           </div>
         </div>
-
-
       </div>
-
+      <div class="container has-text-right is-size-6 has-text-grey-light" style="margin-top: 0.75rem;">
+        <p style="height: 2rem;">{{ hintText }}</p>
+      </div>
+      
     </div>
   </section>
 
+  <!-- HowTo Modal -->
+  <div class="modal_wrap">
+    <input id="howToModalTrigger" type="checkbox">
+      <div class="modal_overlay">
+        <label for="howToModalTrigger" class="modal_trigger"></label>
+        <div class="modal_content">
+          <label for="howToModalTrigger" class="close_button">✖️</label>
+          <h2 class="subtitle">Jimakの使い方</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terms Modal -->
+  <div class="modal_wrap">
+    <input id="termsModalTrigger" type="checkbox">
+      <div class="modal_overlay">
+        <label for="termsModalTrigger" class="modal_trigger"></label>
+        <div class="modal_content">
+          <label for="termsModalTrigger" class="close_button">✖️</label>
+          <h2 class="subtitle">利用規約</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lyrics Copyright Modal -->
+  <div class="modal_wrap">
+    <input id="lyricsCopyrightModalTrigger" type="checkbox">
+      <div class="modal_overlay">
+        <label for="lyricsCopyrightModalTrigger" class="modal_trigger"></label>
+        <div class="modal_content">
+          <label for="lyricsCopyrightModalTrigger" class="close_button">✖️</label>
+          <h2 class="subtitle">歌詞の著作権について</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer -->
   <footer class="footer">
     <div class="content has-text-centered">
       <p>
-        使い方 | 利用規約 | 歌詞の著作権について
+        <a><label for="howToModalTrigger">いい感じの使い方</label></a> | 
+        <a><label for="termsModalTrigger">利用規約</label></a> | 
+        <a><label for="lyricsCopyrightModalTrigger">歌詞の著作権について</label></a>
         <br>
         <span style="font-size: 0.9rem;">
           Copyright <i class="far fa-copyright"></i> 2021 <a href="https://twitter.com/OkuriSae" target="_blank">@OkuriSae</a> | 

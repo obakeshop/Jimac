@@ -6,10 +6,10 @@ const jimakuGenerator = Vue.createApp({
   data() {
     return {
       repertory: [], // レパートリー
-      target: 1, // 曲ID
+      selectedSong: 1, // 選択中の曲ID
       lyric: '', // 歌詞
       jimaku: '', // 字幕テキスト
-      jimakuNext: '', // 次の字幕テキスト
+      previewText: '', // ヒントテキスト
       jimakuIndex: 0, // 字幕の行番号
       jimakuBackColor: "#00FF00", // 字幕の背景色
       jimakuTextColor: "#3333FF", // 字幕のテキストカラー
@@ -23,116 +23,73 @@ const jimakuGenerator = Vue.createApp({
       movieUrl: '', // 動画URL
       movieSrc: '', // 動画埋め込みURL
       tags: '', // 検索用タグ
-      db: { // Access to localStorage
-        getSongs() {
-          return JSON.parse(localStorage.getItem("songs"));
-        },
-        getSelectedId() {
-          return localStorage.getItem("selectedId");
-        },
-        getSong(id) {
-          return JSON.parse(localStorage.getItem(id));
-        },
-        setSongs(songs) {
-          localStorage.setItem("songs", JSON.stringify(songs));
-        },
-        setSelectedId(id) {
-          localStorage.setItem("selectedId", id);
-        },
-        setSong(songId, data) {
-          localStorage.setItem(songId, JSON.stringify({ 
-            lyric: data.lyric, 
-            jimakuFontSize: data.jimakuFontSize, 
-            movieUrl: data.movieUrl, 
-            tags: data.tags, 
-          }));
-        },
-      },
+      hintText: '', // 操作ヒント
     }
   },
 
   methods: {
 
-    /** Utilities **/
-    getlyrics() { return (this.lyric || '').split('\n'); },
-
-    /** Read Methods **/
-    loadSong(songId) { // データをローカルストレージから読込み
-      const data = this.db.getSong(songId);
-      this.target = songId;
+    loadRepertory() {
+      this.repertory = (JSON.parse(localStorage.getItem("repertory")) || []).map( id => {
+        return { 
+          id, 
+          title: this.getSong(id).lyric.split('\n')[0], 
+          tags: this.getSong(id).tags,
+        };
+      });
+    },
+    getSong(id) {
+      return JSON.parse(localStorage.getItem(id));
+    },
+    loadSong(id) {
+      const data = this.getSong(id);
+      this.selectedSong = id;
       this.lyric = data.lyric;
       this.jimakuFontSize = data.jimakuFontSize;
       this.movieUrl = data.movieUrl;
       this.tags = data.tags;
-      $('#lyric').prop('selectionStart', 0);
     },
-
-    loadRepertory() { // レパートリーを最新状態にする
-      this.repertory = this.db.getSongs().map( id => {
-        return { 
-          id, 
-          title: this.db.getSong(id).lyric.split('\n')[0], 
-          tags: this.db.getSong(id).tags,
-        }; 
-      });
+    saveSettings() {
+      localStorage.setItem("settings", JSON.stringify({
+        jimakuFontFamily: this.jimakuFontFamily,
+        jimakuBackColor: this.jimakuBackColor, 
+        jimakuTextColor: this.jimakuTextColor,
+        jimakuAnim: this.jimakuAnim,
+        jimakuOutline: this.jimakuOutline,
+        preview: this.preview,
+      }));
     },
-
-    /** Data modifying Methods **/
-    createSong() { // データ新規作成
-      this.target = Date.now();
+    createSong() {
+      this.selectedSong = Date.now();
       this.lyric = lyricTemplate;
       this.jimakuFontSize = '42pt';
       this.movieUrl = '';
       this.tags = '';
-      this.db.setSong(this.target, this.$data);
-
-      this.db.setSongs([this.target].concat(this.db.getSongs() || []));
-
+      this.saveSong();
+      localStorage.setItem("repertory", JSON.stringify([this.selectedSong].concat((this.repertory || []).map(r => r.id))));
       this.loadRepertory();
-      this.selectSong(this.target);
-      return this.target;
     },
-
-    changelyric() { // 歌詞が更新されたときに保存して画面更新
-      this.db.setSong(this.target, this.$data);
-      this.update();
+    saveSong() {
+      localStorage.setItem(this.selectedSong, JSON.stringify({ 
+        lyric: this.lyric, 
+        jimakuFontSize: this.jimakuFontSize, 
+        movieUrl: this.movieUrl, 
+        tags: this.tags, 
+      }));
     },
-
-    deleteSong() { // データ消去
-
-      if (this.lyric !== lyricTemplate && !confirm('本当に消去しますか？')) {
-        return;
-      }
-
+    removeSong(target) {
+      localStorage.removeItem(target);
       // 削除対象のデータをフィルタして上書き保存
-      let songs = this.db.getSongs().filter( id => {
-        return id !== this.target;
-      });
-      this.db.setSongs(songs);
-      localStorage.removeItem(this.target);
-
-      if (!songs.length) { // 全部消しちゃったら１個新規で作る
-        songs.push(this.createSong());
-      }
-      
-      this.selectSong(songs[0]);
-      this.update();
-    },
-
-    /** Controll Methods **/
-
-    update() {
-      this.updateJimaku();
-      this.updateMovieUrl();
+      localStorage.setItem("repertory", JSON.stringify( 
+        this.repertory.map(r => r.id).filter( id => {
+          return id !== target;
+          }
+        ))
+      );
       this.loadRepertory();
     },
 
-    selectSong(id) { // 指定した曲を表示し、選択状態にする
-      this.loadSong(id);
-      this.setJimakuIndex(0);
-      this.db.setSelectedId(id);
-      this.update();
-    },
+    getlyrics() { return (this.lyric || '').split('\n'); },
     
     async updateJimaku() { // 字幕の更新
       if (this.jimakuAnim) {
@@ -140,7 +97,7 @@ const jimakuGenerator = Vue.createApp({
       }
       await sleep(50); // Refresh delay
       this.jimaku = this.getlyrics()[this.jimakuIndex];
-      this.jimakuNext = this.getlyrics()[this.jimakuIndex+1];
+      this.previewText = this.preview ? this.getlyrics()[this.jimakuIndex+1] : '';
       $("#jimaku-0").addClass("jimaku-0");
       $("#jimaku-1").addClass("jimaku-1");
       $("#jimaku-2").addClass("jimaku-2");
@@ -166,8 +123,6 @@ const jimakuGenerator = Vue.createApp({
     },
     
     async updateMovieUrl() { // 動画情報更新
-      this.db.setSong(this.target, this.$data);
-
       const nicoElement = document.getElementById('nico');
       nicoElement.innerHTML = "";
 
@@ -188,13 +143,37 @@ const jimakuGenerator = Vue.createApp({
       }
     },
     
-    updateJimakuFontSize() {
-      this.db.setSong(this.target, this.$data);
+    update() {
+      this.updateJimaku();
+      this.updateMovieUrl();
+      this.loadRepertory();
     },
     
-    updateTags() {
-      this.db.setSong(this.target, this.$data);
+    updateSong() {
+      this.saveSong();
       this.update();
+    },
+
+    selectSong(id) { // 指定した曲を表示し、選択状態にする
+      this.loadSong(id);
+      $('#lyric').prop('selectionStart', 0);
+      this.updateJimakuIndex();
+      this.update();
+    },
+
+    deleteSong() { // データ消去
+      if (this.lyric !== lyricTemplate && !confirm('本当に消去しますか？')) {
+        return;
+      }
+
+      this.removeSong(this.selectedSong);
+
+      if (!this.repertory.length) { // 全部消しちゃったら１個新規で作る
+        this.createSong();
+      } else {
+        this.selectSong(this.repertory[0].id);
+        this.update();
+      }
     },
 
     windowKeyEvent(event) { // ショートカットキー制御
@@ -208,6 +187,10 @@ const jimakuGenerator = Vue.createApp({
         case 39: this.setJimakuIndex(this.jimakuIndex+1); break;
       }
     },
+
+    hint(message) {
+      this.hintText = message;
+    }
   },
 
   /** Initialize **/
@@ -217,7 +200,7 @@ const jimakuGenerator = Vue.createApp({
         this.createSong();
       } else {
         this.loadRepertory();
-        this.selectSong(this.db.getSelectedId());
+        this.selectSong(this.repertory[0].id);
       }
     })
   },
