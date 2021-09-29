@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>Jima9</title>
+  <title>Jimak - 歌枠字幕ジェネレータ -</title>
 
   <!-- Vue -->
   <script src="https://unpkg.com/vue@next"></script>
@@ -30,11 +30,11 @@
 <body>
   <section>
     <div id="jimakuGenerator" class="container is-fullhd">
-      <h1 class="title">Jima9<span class="is-size-4"> - 歌枠字幕ジェネレータ - </span></h1>
+      <h1 class="title">Jimak<span class="is-size-4"> - 歌枠字幕ジェネレータ - </span></h1>
       <div id="jimakuPane" class="section">
 
-        <!-- Next Jimaku -->
-        <div v-show="preview" class="has-text-centered is-fullwidth next is-size-5" @click="setJimakuIndex(this.jimakuIndex+1)">
+        <!-- Jimaku preview -->
+        <div v-show="preview" class="has-text-centered is-fullwidth next is-size-5">
           {{ jimakuNext }}
         </div>
 
@@ -144,7 +144,7 @@
                   <!-- Search -->
                   <div class="field">
                     <div class="control has-icons-left has-icons-right">
-                      <input class="input is-small" type="text" v-model="filter" placeholder="Search in Title or Tags" tabindex="-1">
+                      <input class="input is-small" type="text" v-model="filter" placeholder="Search in title and tags" tabindex="-1">
                       <span class="icon is-small is-left">
                         <i class="fas fa-search"></i>
                       </span>
@@ -165,14 +165,14 @@
                 <!-- Off-Vocal Finder banner -->
                 <div>
                   <a class="tile has-text-centered banner" href="https://okurisae.github.io/off-vocal-finder/" target="_blank">
-                    <img src="./ovf_banner.png"></img>
+                    <img src="img/ovf_banner.png"></img>
                   </a>
                 </div>
 
                 <!-- Meish banner -->
                 <div>
                   <a class="tile has-text-centered banner" href="https://www.meish.me/" target="_blank">
-                    <img src="./meish_banner.png"></img>
+                    <img src="img/meish_banner.png"></img>
                   </a>
                 </div>
 
@@ -244,9 +244,22 @@
 
 
       </div>
+
     </div>
   </section>
 
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>
+        使い方 | 利用規約 | 歌詞の著作権について
+        <br>
+        <span style="font-size: 0.9rem;">
+          Copyright <i class="far fa-copyright"></i> 2021 <a href="https://twitter.com/OkuriSae" target="_blank">@OkuriSae</a> | 
+          Powered by <a href="https://github.com/OkuriSae/Jimak">GitHub</a>
+        </span>
+      </p>
+    </div>
+  </footer>
 
   <script src="script.js"></script>
 </body>

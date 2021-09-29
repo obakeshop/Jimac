@@ -64,8 +64,7 @@ const jimakuGenerator = Vue.createApp({
       this.jimakuFontSize = data.jimakuFontSize;
       this.movieUrl = data.movieUrl;
       this.tags = data.tags;
-      $('#lyric').prop('selectionStart', 0); 
-      this.changelyric();
+      $('#lyric').prop('selectionStart', 0);
     },
 
     loadRepertory() { // レパートリーを最新状態にする
@@ -135,17 +134,16 @@ const jimakuGenerator = Vue.createApp({
       this.update();
     },
     
-    updateJimaku() { // 字幕の更新
+    async updateJimaku() { // 字幕の更新
       if (this.jimakuAnim) {
         this.jimaku = ""; // Reset animation
       }
-      setTimeout(() => {
-        this.jimaku = this.getlyrics()[this.jimakuIndex];
-        this.jimakuNext = this.getlyrics()[this.jimakuIndex+1];
-        $("#jimaku-0").addClass("jimaku-0");
-        $("#jimaku-1").addClass("jimaku-1");
-        $("#jimaku-2").addClass("jimaku-2");
-      }, 50); // Animation waiting
+      await sleep(50); // Refresh delay
+      this.jimaku = this.getlyrics()[this.jimakuIndex];
+      this.jimakuNext = this.getlyrics()[this.jimakuIndex+1];
+      $("#jimaku-0").addClass("jimaku-0");
+      $("#jimaku-1").addClass("jimaku-1");
+      $("#jimaku-2").addClass("jimaku-2");
     },
     
     setJimakuIndex(value) { // 字幕行番号の変更
@@ -167,35 +165,27 @@ const jimakuGenerator = Vue.createApp({
       }
     },
     
-    updateMovieUrl() { // 動画情報更新
+    async updateMovieUrl() { // 動画情報更新
       this.db.setSong(this.target, this.$data);
 
-      const backup = this.movieUrl;
       const nicoElement = document.getElementById('nico');
-      this.movieType = "";
-      this.movieUrl = "";
-      this.movieSrc = "";
       nicoElement.innerHTML = "";
 
-      setTimeout(() => {
-        this.movieUrl = backup;
+      if (this.movieUrl.indexOf('youtu') !== -1) {
+        const match = /[/?=]([-\w]{11})/.exec(this.movieUrl);
+        this.movieSrc = `https://www.youtube.com/embed/${ match ? match[1] : '' }`
+        this.movieType = 'yt';
 
-        if (this.movieUrl.indexOf('youtu') !== -1) {
-          const match = /[/?=]([-\w]{11})/.exec(this.movieUrl);
-          this.movieSrc = `https://www.youtube.com/embed/${ match ? match[1] : '' }`
-          this.movieType = 'yt';
-
-        } else if (this.movieUrl.indexOf('nico') !== -1) {
-          this.movieType = 'nico';
-          // niconico は scriptタグでvueコンポーネントにできないので手動追加
-          const nicoId = this.movieUrl.match(/(?:sm|nm|so|ca|ax|yo|nl|ig|na|cw|z[a-e]|om|sk|yk)\d{1,14}\b/)[0];
-          const script = document.createElement('script');
-          this.movieSrc = `https://embed.nicovideo.jp/watch/${nicoId}/script?w=408&h=230`;
-          script.setAttribute('type', 'application/javascript');
-          script.setAttribute('src', this.movieSrc);
-          nicoElement.appendChild(script);
-        }
-      }, 50); // Refresh delay
+      } else if (this.movieUrl.indexOf('nico') !== -1) {
+        this.movieType = 'nico';
+        // niconico は scriptタグでvueコンポーネントにできないので手動追加
+        const nicoId = this.movieUrl.match(/(?:sm|nm|so|ca|ax|yo|nl|ig|na|cw|z[a-e]|om|sk|yk)\d{1,14}\b/)[0];
+        const script = document.createElement('script');
+        this.movieSrc = `https://embed.nicovideo.jp/watch/${nicoId}/script?w=408&h=230`;
+        script.setAttribute('type', 'application/javascript');
+        script.setAttribute('src', this.movieSrc);
+        nicoElement.appendChild(script);
+      }
     },
     
     updateJimakuFontSize() {
@@ -233,6 +223,10 @@ const jimakuGenerator = Vue.createApp({
   },
 
 }).mount('#jimakuGenerator');
+
+async function sleep(ms) {
+   return new Promise(r => setTimeout(r, ms));
+}
 
 // ショートカットキー用のイベント取得
 $(window).keyup(function(event) {
