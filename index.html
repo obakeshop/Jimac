@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>Jima9 - 歌枠字幕ジェネレータ</title>
+  <title>Jima9</title>
 
   <!-- Vue -->
   <script src="https://unpkg.com/vue@next"></script>
@@ -30,7 +30,7 @@
 <body>
   <section>
     <div id="jimakuGenerator" class="container is-fullhd">
-      <h1 class="title">Jima9 - 歌枠字幕ジェネレータ</h1>
+      <h1 class="title">Jima9<span class="is-size-4"> - 歌枠字幕ジェネレータ - </span></h1>
       <div id="jimakuPane" class="section">
 
         <!-- Next Jimaku -->
@@ -104,7 +104,7 @@
 
           <!-- FontSize -->
           <div class="button jimakuCtrl">Size:</div>
-          <input class="input" style="width:60px;" type="text" v-model="jimakuFontSize">
+          <input class="input" style="width:60px;" type="text" v-model="jimakuFontSize" @input="updateJimakuFontSize">
 
           <!-- Animation -->
           <div class="button jimakuCtrl">Animation:</div>
@@ -152,11 +152,29 @@
                   </div>
                   
                   <!-- Repertory -->
-                  <div v-show="(song.title+song.tags).indexOf(filter) > -1" v-for="song in repertory" class="button is-info is-light" :class="{ 'is-active': song.id === target }" @click="selectSong(song.id)">{{ song.title.length <= 20 ? song.title : song.title.substr(0, 20) + '...' }}</div>
-                  <div class="button is-info is-light" @click="createSong">＋新規追加＋</div>
+                  <div class="button is-small is-info is-light addsong" @click="createSong">＋新規作成＋</div>
+                  <div class='tile is-child songs'>
+                    <div v-show="(song.title+song.tags).indexOf(filter) > -1"
+                      v-for="song in repertory" 
+                      class="button is-info is-light song" 
+                      :class="{ 'is-active': song.id === target }" 
+                      @click="selectSong(song.id)">{{ song.title.length <= 16 ? song.title : song.title.substr(0, 16) + '...' }}</div>
+                  </div>
                 </div>
 
-                <div><a class="button tile notification banner1" href="https://okurisae.github.io/off-vocal-finder/" target="_blank"></a></div>
+                <!-- Off-Vocal Finder banner -->
+                <div>
+                  <a class="tile has-text-centered banner" href="https://okurisae.github.io/off-vocal-finder/" target="_blank">
+                    <img src="./ovf_banner.png"></img>
+                  </a>
+                </div>
+
+                <!-- Meish banner -->
+                <div>
+                  <a class="tile has-text-centered banner" href="https://www.meish.me/" target="_blank">
+                    <img src="./meish_banner.png"></img>
+                  </a>
+                </div>
 
               </div>
 
@@ -186,16 +204,16 @@
                   <div class="content">
 
                       <!-- video -->
-                      <iframe v-if="movieUrl.indexOf('youtu') !== -1" 
+                      <iframe v-if="movieType === 'yt'" 
                         id="ytplayer" type="text/html" width="409" height="230"
-                        :src="`https://www.youtube.com/embed/${/[/?=]([-\w]{11})/.exec(movieUrl)[1]}`"
+                        :src="movieSrc"
                         frameborder="0" style="border-radius: 4px;"></iframe>
 
                       <div id="nico"></div>
 
                       <div class="field">
                         <div class="control has-icons-left has-icons-right">
-                          <input class="input is-small" type="text" v-model="movieUrl" @input="movieUrlRefresh" placeholder="Movie URL (YouTube or niconico)">
+                          <input class="input is-small" type="text" v-model="movieUrl" @input="updateMovieUrl" placeholder="Movie URL (YouTube or niconico)">
                           <span class="icon is-small is-left">
                             <i class="fab fa-youtube"></i>
                           </span>
@@ -205,7 +223,7 @@
                       <!-- Tags -->
                       <div class="field">
                         <div class="control has-icons-left has-icons-right">
-                          <input class="input is-small" type="text" v-model="tags" placeholder="#tags">
+                          <input class="input is-small" type="text" v-model="tags" @input="updateTags" placeholder="#tags">
                           <span class="icon is-small is-left">
                             <i class="fas fa-tags"></i>
                           </span>
