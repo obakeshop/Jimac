@@ -137,10 +137,20 @@ h1 {
   margin-bottom: 0;
 }
 
-.song, .addsong {
+.song{
   width: 100%; 
   margin-bottom: 5px;
 }
+
+.songCtrl {
+  margin-top: 5px;
+  margin-right: 5px;
+  border-radius: 5px !important;
+}
+.songCtrl:last-child {
+  margin-right: 0px;
+}
+
 .repertory>div>.button:last-child {
   margin-bottom: 0;
 }

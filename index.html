@@ -39,7 +39,7 @@
         </div>
 
         <!-- Jimaku -->
-        <button id="jimaku" class="button jimaku-area" :data-clipboard-text="jimaku" @mouseover="hint('クリックで表示中の歌詞をクリップボードにコピー')">
+        <button id="jimaku" class="button jimaku-area clipboard" :data-clipboard-text="jimaku" @mouseover="hint('クリックで表示中の歌詞をクリップボードにコピー')">
 
           <!-- text CSS -->
           <component is="style">
@@ -113,7 +113,7 @@
           <!-- FontSize -->
           <div class="is-inline" @mouseover="hint('字幕のフォントサイズを変更します(曲ごとに保持されます)')">
             <div class="button jimakuCtrl">Size:</div>
-            <input class="input" style="width:60px;" type="text" v-model="jimakuFontSize" @input="updateSong">
+            <input class="input" style="width:60px;" type="text" v-model="jimakuFontSize">
           </div>
 
           <!-- Animation -->
@@ -154,7 +154,7 @@
                   <!-- Search -->
                   <div class="field" @mouseover="hint('タイトルまたはタグで検索ができます')">
                     <div class="control has-icons-left has-icons-right">
-                      <input class="input is-small" type="text" v-model="filter" placeholder="Search in title and tags" tabindex="-1">
+                      <input class="input is-small" type="text" v-model="searchText" placeholder="Search in title and tags" tabindex="-1">
                       <span class="icon is-small is-left">
                         <i class="fas fa-search"></i>
                       </span>
@@ -162,15 +162,28 @@
                   </div>
                   
                   <!-- Repertory -->
-                  <div class="button is-small is-info is-light addsong" @click="createSong" @mouseover="hint('無料版は5曲まで追加できます')">＋新規作成＋</div>
                   <div class='tile is-child songs'>
-                    <div v-show="(song.title+song.tags).indexOf(filter) > -1"
-                      v-for="song in repertory" 
-                      class="button is-info is-light song" 
-                      :class="{ 'is-active': song.id === selectedSong }" 
+                    <div v-for="song in filteredRepertory"
+                      class="button is-info is-light song"
+                      :class="{ 'is-active': song.id === selectedSong }"
                       @click="selectSong(song.id)"
                       @mouseover="hint(`${song.title} ${song.tags}`)">{{ song.title.length <= 16 ? song.title : song.title.substr(0, 16) + '...' }}</div>
                   </div>
+                  
+                  <!-- Repertory Controlls -->
+                  <div>
+                    <!-- Create -->
+                    <button class="button is-info is-small is-outlined songCtrl" @click="addSong" @mouseover="hint('曲を追加します(無料版は5曲まで)')"><i class="fas fa-plus"></i></button>
+                    
+                    <!-- Copy Repertory -->
+                    <button class="button is-info is-small is-outlined songCtrl clipboard" :data-clipboard-text="repertory.map(r => r.title).join(`\n`)" @mouseover="hint('検索中の曲リストをクリップボードにコピーします')"><i class="fas fa-copy"></i></button>
+
+                    <!-- Cross Change -->
+                    <button class="button is-info is-small is-outlined songCtrl" @click="shiftSongForFilteredRepertory(-1)" :disabled="!canShiftUp" @mouseover="hint('1つ上の曲と順番を入れ替えます')"><i class="fas fa-chevron-up"></i></button>
+                    <button class="button is-info is-small is-outlined songCtrl" @click="shiftSongForFilteredRepertory(+1)" :disabled="!canShiftDown" @mouseover="hint('1つ下の曲と順番を入れ替えます')"><i class="fas fa-chevron-down"></i></button>
+
+                    <!-- Delete -->
+                    <button class="button is-info is-small is-outlined songCtrl" @click="deleteSong" @mouseover="hint('選択中の曲を削除します')"><i class="fas fa-trash-alt"></i></div>
                 </div>
 
                 <!-- Off-Vocal Finder banner -->
@@ -199,9 +212,8 @@
                           id="lyric"
                           autofocus
                           contenteditable 
-                          v-model="lyric" 
-                          @input="updateSong"
-                          @click="updateJimakuIndex"
+                          v-model="lyric"
+                          @click="updateJimakuIndexToCursor"
                           @keyup="moveEditorCousor"></textarea>
                     </div>
                   </div>
@@ -214,16 +226,11 @@
                   <div class="content">
 
                       <!-- video -->
-                      <iframe v-if="movieType === 'yt'" 
-                        id="ytplayer" type="text/html" width="409" height="230"
-                        :src="movieSrc"
-                        frameborder="0" style="border-radius: 4px;"></iframe>
-
-                      <div id="nico"></div>
+                      <div id="video"></div>
 
                       <div class="field" @mouseover="hint('YouTubeまたはニコニコの動画を登録できます')">
                         <div class="control has-icons-left has-icons-right">
-                          <input class="input is-small" type="text" v-model="movieUrl" @input="updateSong" placeholder="Movie URL (YouTube or niconico)">
+                          <input class="input is-small" type="text" v-model="movieUrl" placeholder="Movie URL (YouTube or niconico)">
                           <span class="icon is-small is-left">
                             <i class="fab fa-youtube"></i>
                           </span>
@@ -233,16 +240,11 @@
                       <!-- Tags -->
                       <div class="field" @mouseover="hint('検索に使えるタグを設定します')">
                         <div class="control has-icons-left has-icons-right">
-                          <input class="input is-small" type="text" v-model="tags" @input="updateSong" placeholder="#tags">
+                          <input class="input is-small" type="text" v-model="tags" placeholder="#tags">
                           <span class="icon is-small is-left">
                             <i class="fas fa-tags"></i>
                           </span>
                         </div>
-                      </div>
-
-                      <!-- Delete Button -->
-                      <div style="text-align: right;" @mouseover="hint('選択中の曲を削除します')">
-                        <div class="button is-small is-danger is-outlined" @click="deleteSong"><i class="fas fa-trash-alt"> Delete</i></div>
                       </div>
 
                   </div>
@@ -305,7 +307,7 @@
   <footer class="footer">
     <div class="content has-text-centered">
       <p>
-        <a><label for="howToModalTrigger">いい感じの使い方</label></a> | 
+        <a><label for="howToModalTrigger">使い方</label></a> | 
         <a><label for="termsModalTrigger">利用規約</label></a> | 
         <a><label for="lyricsCopyrightModalTrigger">歌詞の著作権について</label></a>
         <br>
