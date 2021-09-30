@@ -267,11 +267,13 @@ const jimakuGenerator = Vue.createApp({
 
       this.removeSong(this.selectedSong);
 
-      if (!this.songIds.length) { // 全部消しちゃったら１個新規で作る
-        this.createSong();
-      } else {
-        this.selectedSong = this.filteredRepertory[0].id;
-      }
+      this.$nextTick(function() {
+        if (!this.songIds.length) { // 全部消しちゃったら１個新規で作る
+          this.createSong();
+        } else {
+          this.selectedSong = this.filteredRepertory[0].id;
+        }
+      });
     },
 
     windowKeyEvent(event) { // ショートカットキー制御
