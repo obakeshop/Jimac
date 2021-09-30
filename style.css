@@ -266,3 +266,7 @@ box-shadow:0 0 0 1px rgba(255, 255, 255, 0.1);
 .modal_wrap input:checked ~ .modal_overlay .modal_content{
   transform: scale(1);
 }
+
+.button[disabled] {
+  cursor: default;
+}
