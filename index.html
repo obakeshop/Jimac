@@ -173,7 +173,9 @@
                   <!-- Repertory Controlls -->
                   <div>
                     <!-- Create -->
-                    <button class="button is-info is-small is-outlined songCtrl" @click="addSong" @mouseover="hint('曲を追加します(無料版は5曲まで)')"><i class="fas fa-plus"></i></button>
+                    
+                    <button v-if="!isLocked" class="button is-info is-small is-outlined songCtrl" @click="addSong" @mouseover="hint('曲を追加します(無料版は5曲まで)')"><i class="fas fa-plus"></i></button>
+                    <a v-if="isLocked" href="https://booth.pm/ja" target="_blank" class="button is-info is-small is-outlined songCtrl" @mouseover="hint('5曲以上はアクティベーションが必要です(クリックで購入サイト)')"><i class="fas fa-lock"></i></a>
                     
                     <!-- Copy Repertory -->
                     <button class="button is-info is-small is-outlined songCtrl clipboard" :data-clipboard-text="repertory.map(r => r.title).join(`\n`)" @mouseover="hint('検索中の曲リストをクリップボードにコピーします')"><i class="fas fa-copy"></i></button>
@@ -243,6 +245,16 @@
                           <input class="input is-small" type="text" v-model="tags" placeholder="#tags">
                           <span class="icon is-small is-left">
                             <i class="fas fa-tags"></i>
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <!-- Activate -->
+                      <div class="field" @mouseover="hint( isActivated ? '今は有料版です（ご購入ありがとうございます！）' : '今は無料版です' )">
+                        <div class="control has-icons-left has-icons-right">
+                          <input class="input is-small" type="password" v-model="activationCode" placeholder="Activation Code">
+                          <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
                           </span>
                         </div>
                       </div>

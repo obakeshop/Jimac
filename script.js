@@ -2,6 +2,11 @@
 const lyricTemplate = `曲名 / アーティスト
 
 ここに歌詞を貼り付けます`;
+const activationHashes = [
+  '962540c1187c0cd1d4a624c124b3842d61ef1654a4957d5afa4bdbd8bf4e561d',
+  '2cdc1139506cd061a18ccf12e99f9bee6f16a75a9f371906ce94386180cb5d6c',
+  '029b2ecc824c018d8a3ff3998aaa8e82024a24f6952ee993aaf27e9a4ef22c7e',
+];
 
 const jimakuGenerator = Vue.createApp({
   data() {
@@ -25,6 +30,8 @@ const jimakuGenerator = Vue.createApp({
       movieUrl: '', // 動画URL
       tags: '', // 検索用タグ
       hintText: '', // 操作ヒント
+      activationCode: '', // 有料機能解除コード
+      isActivated: false,
     }
   },
 
@@ -42,6 +49,9 @@ const jimakuGenerator = Vue.createApp({
       const nicoId = this.movieUrl.match(/(?:sm|nm|so|ca|ax|yo|nl|ig|na|cw|z[a-e]|om|sk|yk)\d{1,14}\b/)[0];
       return `https://embed.nicovideo.jp/watch/${nicoId}/script?w=408&h=230`;
     },
+    isLocked: function() {
+      return this.songIds.length >= 5 && !this.isActivated 
+    }
   },
 
   watch: {
@@ -73,13 +83,13 @@ const jimakuGenerator = Vue.createApp({
       this.updateJimaku();
     },
 
-    jimakuBackColor: function() { saveSettings(); },
-    jimakuTextColor: function() { saveSettings(); },
-    jimakuFontFamily: function() { saveSettings(); },
-    jimakuFontSize: function() { saveSong(); },
-    jimakuAnim: function() { saveSettings(); },
-    jimakuOutline: function() { saveSettings(); },
-    preview: function() { saveSettings(); },
+    jimakuBackColor: function() { this.saveSettings(); },
+    jimakuTextColor: function() { this.saveSettings(); },
+    jimakuFontFamily: function() { this.saveSettings(); },
+    jimakuFontSize: function() { this.saveSong(); },
+    jimakuAnim: function() { this.saveSettings(); },
+    jimakuOutline: function() { this.saveSettings(); },
+    preview: function() { this.saveSettings(); },
 
     searchText: function() {
       this.repertoryFiltering();
@@ -115,6 +125,11 @@ const jimakuGenerator = Vue.createApp({
       this.saveSong();
       this.updateRepertory();
     },
+
+    activationCode: async function() {
+      this.saveSettings();
+      this.isActivated = activationHashes.includes(await sha256(this.activationCode));
+    },
   },
 
   methods: {
@@ -126,6 +141,7 @@ const jimakuGenerator = Vue.createApp({
         jimakuAnim: "none",
         jimakuOutline: true,
         preview: false,
+        activationCode: '',
       }));
       this.loadSettings();
     },
@@ -150,11 +166,12 @@ const jimakuGenerator = Vue.createApp({
     loadSettings() {
       const settings = JSON.parse(localStorage.getItem("settings"));
       this.jimakuFontFamily = settings.jimakuFontFamily;
-      this.jimakuBackColor = settings.jimakuBackColor; 
+      this.jimakuBackColor = settings.jimakuBackColor;
       this.jimakuTextColor = settings.jimakuTextColor;
       this.jimakuAnim = settings.jimakuAnim;
       this.jimakuOutline = settings.jimakuOutline;
       this.preview = settings.preview;
+      this.activationCode = settings.activationCode;
     },
     loadSong(id) {
       const data = this.getSong(id);
@@ -168,11 +185,12 @@ const jimakuGenerator = Vue.createApp({
     saveSettings() {
       localStorage.setItem("settings", JSON.stringify({
         jimakuFontFamily: this.jimakuFontFamily,
-        jimakuBackColor: this.jimakuBackColor, 
+        jimakuBackColor: this.jimakuBackColor,
         jimakuTextColor: this.jimakuTextColor,
         jimakuAnim: this.jimakuAnim,
         jimakuOutline: this.jimakuOutline,
         preview: this.preview,
+        activationCode: this.activationCode,
       }));
     },
     saveSong() {
@@ -302,5 +320,11 @@ const jimakuGenerator = Vue.createApp({
 $(window).keyup(function(event) {
   jimakuGenerator.windowKeyEvent(event);
 });
+
+async function sha256(str) {
+  const buff = new Uint8Array([].map.call(str, (c) => c.charCodeAt(0))).buffer;
+  const digest = await crypto.subtle.digest('SHA-256', buff);
+  return [].map.call(new Uint8Array(digest), x => ('00' + x.toString(16)).slice(-2)).join('');
+}
 
 new Clipboard('.clipboard'); // clipboard.js
