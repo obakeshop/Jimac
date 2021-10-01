@@ -280,13 +280,206 @@
 
   <!-- HowTo Modal -->
   <div class="modal_wrap">
-    <input id="howToModalTrigger" type="checkbox">
+    <input id="howToModalTrigger" type="checkbox" checked>
       <div class="modal_overlay">
         <label for="howToModalTrigger" class="modal_trigger"></label>
-        <div class="modal_content">
+        <div class="modal_content" style="height: 90%; overflow: scroll;">
           <label for="howToModalTrigger" class="close_button">✖️</label>
-          <h2 class="subtitle">Jimakの使い方</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+          <h2 class="title is-2">Jimak How to</h2>
+
+          <div class="mt-5">
+            <p>
+              <a href="#howto_jimak">Jimakとは？</a> /
+              <a href="#howto_sample">利用シーンのサンプル</a> /
+              <a href="#howto_settings">配信ツールの設定 (OBS)</a> /
+              <a href="#howto_lyrics">歌詞ボード</a> /
+              <a href="#howto_jimaku_shifter">字幕の切り替え</a> /
+              <a href="#howto_jimaku_color">背景色、文字色</a> /
+              <a href="#howto_jimaku_font">フォント</a> /
+              <a href="#howto_jimaku_decolate">縁取り、アニメーション</a> /
+              <a href="#howto_jimaku_preview">歌詞プレビュー</a> /
+              <a href="#howto_search">楽曲検索 [フィルタ]</a> /
+              <a href="#howto_repertory">楽曲の追加、並び替え、削除</a> /
+              <a href="#howto_movie">動画プレーヤー</a> /
+              <a href="#howto_tags">タグ</a> /
+              <a href="#howto_activation">有料版の機能</a>
+            </p>
+          </div>
+
+          <div id="howto_jimak" class="mt-5">
+            <h5 class="title is-5">Jimakとは？</h5>
+            <p>
+              Jimakは、歌枠や歌ってみたの字幕オーバーレイ素材をお手軽に作れるWebツールです。<br>
+              カラーやフォントの変更、縁取りなど多彩な装飾機能を備え、レパートリーの管理や検索なども行えます。
+            </p>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/sample1.png"></p>
+            </div>
+            <p class="has-text-right is-size-7">引用: <a href="https://www.youtube.com/watch?v=dHXC_ahjtEE" target="_blank">グッバイ宣言 / FloweR</a></p>
+          </div>
+
+          <div id="howto_sample" class="mt-5">
+            <h5 class="title is-5">利用シーンのサンプル</h5>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+          </div>
+
+          <div id="howto_settings" class="mt-5">
+            <h5 class="title is-5">配信ツールの設定 (OBS)</h5>
+            <p>
+              ウィンドウキャプチャでJimakuのウィンドウを取り込みます。<br>
+              フィルタ機能より字幕表示部分以外をクロップ（トリミング）し、字幕の背景色をクロマキー/カラーキーで透過します。
+            </p>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/setting_sample2.png"></p>
+              <p class="has-text-centered">Jimak設定</p>
+            </div>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/setting_sample1.png"></p>
+              <p class="has-text-centered">OBSレイアウト</p>
+            </div>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/setting_sample3.png"></p>
+              <p class="has-text-centered">OBS:フィルタ-クロップ/Pad</p>
+            </div>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/setting_sample4.png"></p>
+              <p class="has-text-centered">OBS:フィルタ-カラーキー</p>
+            </div>
+            <p class="has-text-right is-size-7">引用: <a href="https://www.youtube.com/watch?v=9QLT1Aw_45s" target="_blank">フォニイ / 可不</a></p>
+          </div>
+
+          <div id="howto_lyrics" class="mt-5">
+            <h5 class="title is-5">歌詞ボード</h5>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+          </div>
+
+          <div id="howto_jimaku_shifter" class="mt-5">
+            <h5 class="title is-5">字幕の切り替え</h5>
+            <p>
+              [<i class="fas fa-angle-double-left"></i>] カウンター[表示行]を0に戻します。<br>
+              [<i class="fas fa-angle-left"></i>] (または左矢印キー) カウンターを1つ前に戻します。 <br>
+              [<i class="fas fa-angle-right"></i>] (または右矢印キー) カウンターを1つ先に進めます。
+            </p>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/jimaku_shifter.png"></p>
+            </div>
+          </div>
+
+          <div id="howto_jimaku_color" class="mt-5">
+            <h5 class="title is-5">背景色、文字色</h5>
+            <p>
+              字幕の背景色や文字色をカラーピッカーで変更できます。<br>
+              RGB/HSL/HEXの数値での指定やスポイトでの色抽出も可能です。
+            </p>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/jimaku_color.png"></p>
+            </div>
+          </div>
+
+          <div id="howto_jimaku_font" class="mt-5">
+            <h5 class="title is-5">フォント</h5>
+            <p>
+              字幕のフォントやフォントサイズを変更できます。
+              フォントサイズは楽曲ごとに保持されます。<br>
+              （フォントの種類によって縁取りにトゲのようなノイズが出る場合があります）
+            </p>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/jimaku_font.png"></p>
+            </div>
+          </div>
+
+          <div id="howto_jimaku_decolate" class="mt-5">
+            <h5 class="title is-5">縁取り、アニメーション</h5>
+            <p>
+              字幕切り替え時のアニメーションを設定したり、テキストに縁取りを施すことができます。<br>
+              ※フォントによっては縁取りにトゲついたノイズが入る場合があるため、気になる場合は縁取りをオフにしてください。
+            </p>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/jimaku_decolate.png"></p>
+            </div>
+          </div>
+
+          <div id="howto_jimaku_preview" class="mt-5">
+            <h5 class="title is-5">歌詞プレビュー</h5>
+            <p>
+              
+            </p>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/jimaku_preview.png"></p>
+            </div>
+            <p class="has-text-right is-size-7">引用: <a href="https://www.youtube.com/watch?v=wUHBqw7N_Z4" target="_blank">ヨワネハキ / MAISONdes</a></p>
+          </div>
+
+          <div id="howto_search" class="mt-5">
+            <h5 class="title is-5">楽曲検索 [フィルタ]</h5>
+            <p>
+              楽曲のタイトル（歌詞の一行目）と登録された<a href="#howto_tags">タグ</a>から楽曲検索[フィルタ]を行えます。<br>
+              複数の単語で検索したい場合はスペースで区切ります。（AND検索になります）<br>
+              単語の先頭に-[マイナス]をつけることで除外検索を行えます。
+            </p>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/jimaku_search.png"></p>
+            </div>
+          </div>
+
+          <div id="howto_repertory" class="mt-5">
+            <h5 class="title is-5">楽曲一覧</h5>
+            <p>
+              各楽曲の歌詞の先頭がタイトルとなり、一覧表示されます。<br>
+              6曲目以降はスクロールで表示されます。
+            </p>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/jimaku_repertory_1.png"></p>
+            </div>
+            <h5 class="title is-5">楽曲の追加/並び替え/削除</h5>
+            <p>
+              [<i class="fas fa-plus"></i>] 楽曲を追加します。6曲目以降は<a href="#howto_activation">有料版へのアクティベート</a>が必要です。<br>
+              [<i class="fas fa-chevron-up"></i>] [<i class="fas fa-chevron-down"></i>] 選択中の楽曲を1つ上または下の(表示中の)楽曲と位置を入れ替えます。<br>
+              [<i class="fas fa-trash-alt"></i>] 選択中の楽曲を削除します。<br>
+              [<i class="fas fa-copy"></i>] 楽曲一覧（<a href="#howto_search">フィルタ</a>済みの内容）をクリップボードにコピーできます。
+            </p>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/jimaku_repertory_2.png"></p>
+            </div>
+          </div>
+
+          <div id="howto_movie" class="mt-5">
+            <h5 class="title is-5">動画プレーヤー</h5>
+            <p>
+              YouTubeまたはニコニコ動画のURLを張り付けると動画プレーヤーが表示され、動画を再生できます。<br>
+              練習用のカラオケ動画や、二次利用可能な音源などを登録してお使いください。
+            </p>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/jimaku_movie_yt.png"></p>
+              <p class="has-text-centered">YouTube</p>
+            </div>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/jimaku_movie_nico.png"></p>
+              <p class="has-text-centered">ニコニコ動画</p>
+            </div>
+            <p class="has-text-right is-size-7">引用: <a href="https://www.nicovideo.jp/watch/sm29822304" target="_blank">シャルル／flower</a></p>
+          </div>
+
+          <div id="howto_tags" class="mt-5">
+            <h5 class="title is-5">タグ</h5>
+            <p>
+              <a href="#howto_search">楽曲検索 [フィルタ]</a>に使えるタグ/キーワードを設定します。（先頭が#である必要はありません）<br>
+              <br>
+              <h5 class="title is-6">使い方のヒント</h5>
+              - [〇〇歌枠] などを設定しておくことで、歌枠のレパートリーを作ることができます。<br>
+              - [バラード] など楽曲のジャンルを設定しておくことで、縛り歌枠などで使えるレパートリーが出せます。<br>
+              - [練習中] と設定しておくことで、練習中の曲を除外検索（先頭に-をつけて検索）できるようになります。
+            </p>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/jimaku_tags.png"></p>
+            </div>
+          </div>
+
+          <div id="howto_activation" class="mt-5">
+            <h5 class="title is-5">有料版の機能</h5>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+          </div>
+
         </div>
       </div>
     </div>
@@ -330,7 +523,7 @@
         <br>
         <span style="font-size: 0.9rem;">
           Copyright <i class="far fa-copyright"></i> 2021 <a href="https://twitter.com/OkuriSae" target="_blank">@OkuriSae</a> | 
-          Powered by <a href="https://github.com/OkuriSae/Jimak">GitHub</a>
+          Powered by <a href="https://github.com/OkuriSae/Jimak" target="_blank">GitHub</a>
         </span>
       </p>
     </div>
