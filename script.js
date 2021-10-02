@@ -26,6 +26,7 @@ const jimac = Vue.createApp({
       jimakuFontSize: "", // 字幕フォントサイズ
       jimakuAnim: "none", // 字幕をアニメーションさせるか
       jimakuOutline: true, // 字幕の縁取り
+      jimakuTategaki: false, // 字幕の縦書きモード
       preview: false, // プレビューモード
       searchText: '', // レパートリー検索条件
       movieUrl: '', // 動画URL
@@ -94,6 +95,7 @@ const jimac = Vue.createApp({
     jimakuFontSize: function() { this.saveSong(); },
     jimakuAnim: function() { this.saveSettings(); },
     jimakuOutline: function() { this.saveSettings(); },
+    jimakuTategaki: function() { this.saveSettings(); },
     preview: function() { this.saveSettings(); },
 
     searchText: function() {
@@ -153,6 +155,7 @@ const jimac = Vue.createApp({
         jimakuFontFamily: "'Kiwi Maru', serif",
         jimakuAnim: "none",
         jimakuOutline: true,
+        jimakuTategaki: false,
         preview: false,
         activationCode: '',
         isActivated: false,
@@ -184,6 +187,7 @@ const jimac = Vue.createApp({
       this.jimakuTextColor = settings.jimakuTextColor;
       this.jimakuAnim = settings.jimakuAnim;
       this.jimakuOutline = settings.jimakuOutline;
+      this.jimakuTategaki = this.jimakuTategaki;
       this.preview = settings.preview;
       this.activationCode = settings.activationCode;
       this.isActivated = settings.isActivated;
@@ -204,6 +208,7 @@ const jimac = Vue.createApp({
         jimakuTextColor: this.jimakuTextColor,
         jimakuAnim: this.jimakuAnim,
         jimakuOutline: this.jimakuOutline,
+        jimakuTategaki: this.jimakuTategaki,
         preview: this.preview,
         activationCode: this.activationCode,
         isActivated: this.isActivated,

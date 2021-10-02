@@ -53,6 +53,9 @@
             .jimaku-0,.jimaku-2{
               color: {{ jimakuTextColor }};
             }
+            span.item {
+              transform: rotate( {{ jimakuTategaki ? '-90deg' : '0deg' }} );
+            }
           </component>
           
           <!-- anim CSS (Toggle) -->
@@ -97,7 +100,7 @@
           </div>
 
           <!-- FontFamily -->
-          <div class="is-inline" @mouseover="hint('字幕のフォントを変更します' + (isActivated ? '' : '(有料版は+12フォント)'))">
+          <div class="is-inline" @mouseover="hint('字幕のフォントを変更します' + (isActivated ? '' : '(有料版は+10フォント)'))">
             <div class="button jimakuCtrl">Font:</div>
             <div class="select">
               <select name="fontFamily" style="width:170px;" v-model="jimakuFontFamily">
@@ -148,6 +151,13 @@
             <input id="previewSw" v-model="preview" type="checkbox" name="previewSw" class="switch is-rtl">
             <label for="previewSw" style="padding-left: 15px; padding-right: 53px; top: 8px;">Preview:</label>
           </div>
+
+          <!-- Tategaki -->
+          <div v-if="isActivated" class="field" style="display: inline;" @mouseover="hint('字幕を縦書き表示にします')">
+            <input id="tategakiSw" v-model="jimakuTategaki" type="checkbox" name="tategakiSw" class="switch is-rtl">
+            <label for="tategakiSw" style="padding-left: 15px; padding-right: 53px; top: 8px;">Tategaki:</label>
+          </div>
+          
           
         </div>
 
