@@ -350,6 +350,9 @@ $(window).keyup(function(event) {
   jimac.windowKeyEvent(event);
 });
 
+/**
+ * アクティベート用ハッシュ計算
+ */
 async function sha256(str) {
   const buff = new Uint8Array([].map.call(str, (c) => c.charCodeAt(0))).buffer;
   const digest = await crypto.subtle.digest('SHA-256', buff);
