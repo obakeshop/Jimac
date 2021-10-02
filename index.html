@@ -97,15 +97,26 @@
           </div>
 
           <!-- FontFamily -->
-          <div class="is-inline" @mouseover="hint('字幕のフォントを変更します')">
+          <div class="is-inline" @mouseover="hint('字幕のフォントを変更します' + (isActivated ? '' : '(有料版は+12フォント)'))">
             <div class="button jimakuCtrl">Font:</div>
             <div class="select">
               <select name="fontFamily" style="width:170px;" v-model="jimakuFontFamily">
                 <option value="'Kiwi Maru', serif">Kiwi Maru</option>
+                <option value="'Kaisei Tokumin', serif">Kaisei Tokumin</option>
                 <option value="'Yusei Magic', sans-serif">Yusei Magic</option>
                 <option value="'Hachi Maru Pop', cursive">Hachi Maru Pop</option>
-                <option value="'Kaisei Tokumin', serif">Kaisei Tokumin</option>
-                <option value="'DotGothic16', sans-serif">DotGothic16</option>
+                <template v-if="isActivated">
+                  <option value="'Shippori Mincho B1', serif">Shippori Mincho B1</option>
+                  <option value="'Klee One', cursive">Klee One</option>
+                  <option value="'Kosugi Maru', sans-serif">Kosugi Maru</option>
+                  <option value="'Yomogi', cursive">Yomogi</option>
+                  <option value="'RocknRoll One', sans-serif">RocknRoll One</option>
+                  <option value="'Potta One', cursive">Potta One</option>
+                  <option value="'Dela Gothic One', cursive">Dela Gothic One</option>
+                  <option value="'Rampart One', cursive">Rampart One</option>
+                  <option value="'New Tegomin', serif">New Tegomin</option>
+                  <option value="'DotGothic16', sans-serif">DotGothic16</option>
+                </template>
               </select>
             </div>
           </div>
