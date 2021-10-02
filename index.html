@@ -168,13 +168,15 @@
                       :class="{ 'is-active': song.id === selectedSong }"
                       @click="selectSong(song.id)"
                       @mouseover="hint(`${song.title} ${song.tags}`)">
-                      <div style="width:100%; overflow: hidden;" class="marquee">{{ song.title }}
+                      <div style="width:100%; overflow: hidden;" class="marquee">
+                        {{ song.title }}
                       </div>
                     </div>
                   </div>
                   
                   <!-- Repertory Controlls -->
                   <div>
+
                     <!-- Create -->
                     <button v-if="!isLocked" class="button is-info is-small is-outlined songCtrl" @click="addSong" @mouseover="hint('曲を追加します' + (isActivated ? '' : '(無料版は5曲まで)'))"><i class="fas fa-plus"></i></button>
                     <a v-if="isLocked" href="https://booth.pm/ja" target="_blank" class="button is-info is-small is-outlined songCtrl" @mouseover="hint('5曲以上はアクティベーションが必要です(クリックで購入サイト)')"><i class="fas fa-lock"></i></a>
@@ -187,7 +189,7 @@
                     <button class="button is-info is-small is-outlined songCtrl" @click="deleteSong" @mouseover="hint('選択中の曲を削除します')"><i class="fas fa-trash-alt"></i></button>
 
                     <!-- Copy Repertory -->
-                    <button class="button is-info is-small is-outlined songCtrl clipboard" :data-clipboard-text="repertory.map(r => r.title).join(`\n`)" @mouseover="hint('検索中の曲リストをクリップボードにコピーします')"><i class="fas fa-copy"></i></button>
+                    <button class="button is-info is-small is-outlined songCtrl clipboard" :data-clipboard-text="filteredRepertory.map(r => r.title).join(`\n`)" @mouseover="hint('検索中の曲リストをクリップボードにコピーします')"><i class="fas fa-copy"></i></button>
 
                     <!-- Activate -->
                     <div class="field is-info is-small is-outlined songCtrl" style="width:89px; display: inline-block;" @mouseover="hint( isActivated ? '今は有料版です（ご購入ありがとうございます！）' : '今は無料版です' )">
@@ -271,6 +273,7 @@
           </div>
         </div>
       </div>
+
       <div class="container has-text-right is-size-6 has-text-grey-light" style="margin-top: 0.75rem;">
         <p style="height: 2rem;">{{ hintText }}</p>
       </div>
@@ -316,11 +319,6 @@
               <p class="has-text-centered"><img src="img/howto/sample1.png"></p>
             </div>
             <p class="has-text-right is-size-7">引用: <a href="https://www.youtube.com/watch?v=dHXC_ahjtEE" target="_blank">グッバイ宣言 / FloweR</a></p>
-          </div>
-
-          <div id="howto_sample" class="mt-5">
-            <h5 class="title is-5">利用シーンのサンプル</h5>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
           </div>
 
           <div id="howto_settings" class="mt-5">
@@ -477,7 +475,16 @@
 
           <div id="howto_activation" class="mt-5">
             <h5 class="title is-5">有料版の機能</h5>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+            <p>
+              Jimak有料版は <a href="">xxx</a> にて購入いただけます。<br>
+              <br>
+              有料版にアクティベートされると以下の機能が解放されます。<br>
+
+              - 楽曲を6曲以上追加/管理可能になります。<br>
+              - 歌詞を70行以上登録可能になります。<br>
+              - タグを合計20文字以上登録可能になります。<br>
+              - 追加のフォント10種を利用できるようになります。
+            </p>
           </div>
 
         </div>
