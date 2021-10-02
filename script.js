@@ -1,5 +1,5 @@
 'use strict'
-const lyricFirstValue = `曲名 / アーティスト
+const lyricsFirstValue = `曲名 / アーティスト
 
 ここに歌詞を貼り付けます`;
 
@@ -16,7 +16,7 @@ const jimac = Vue.createApp({
       repertory: [], // フルレパートリー
       filteredRepertory: [], // フィルタ済みレパートリー
       selectedSong: 1, // 選択中の曲ID
-      lyric: '', // 歌詞
+      lyrics: '', // 歌詞
       jimaku: '', // 字幕テキスト
       previewText: '', // ヒントテキスト
       jimakuIndex: 0, // 字幕の行番号
@@ -38,7 +38,7 @@ const jimac = Vue.createApp({
 
   computed: {
     selectedIndexFromFilteredRepertory: function() { return this.filteredRepertory.map(r => r.id).findIndex(id => id === this.selectedSong) },
-    splitedLyrics: function() { return (this.lyric || '').split('\n') },
+    splitedLyrics: function() { return (this.lyrics || '').split('\n') },
     title: function() { return this.splitedLyrics[0] },
     canShiftUp: function() { return this.selectedIndexFromFilteredRepertory !== 0 },
     canShiftDown: function() { return this.selectedIndexFromFilteredRepertory !== this.filteredRepertory.length-1 },
@@ -70,11 +70,15 @@ const jimac = Vue.createApp({
 
     selectedSong: function() {
       this.loadSong(this.selectedSong);
-      $('#lyric').prop('selectionStart', 0);
+      $('#lyrics').prop('selectionStart', 0);
       this.updateJimaku();
     },
 
-    lyric: function() {
+    lyrics: function() {
+      if (!this.isActivated && this.splitedLyrics.length > 71) {
+        this.lyrics = this.splitedLyrics.slice(0, 71).join("\n");
+        return;
+      }
       this.saveSong();
       this.updateRepertory();
       this.updateJimaku();
@@ -123,6 +127,10 @@ const jimac = Vue.createApp({
     },
     
     tags: function() {
+      if (!this.isActivated && this.tags.length > 20) {
+        this.tags = this.tags.substr(0, 20);
+        return;
+      }
       this.saveSong();
       this.updateRepertory();
     },
@@ -130,6 +138,10 @@ const jimac = Vue.createApp({
     activationCode: async function() {
       this.saveSettings();
       this.isActivated = activationHashes.includes(await sha256(this.activationCode));
+    },
+    
+    isActivated: function() {
+      this.saveSettings();
     },
   },
 
@@ -143,13 +155,14 @@ const jimac = Vue.createApp({
         jimakuOutline: true,
         preview: false,
         activationCode: '',
+        isActivated: false,
       }));
       this.loadSettings();
     },
     createSong() {
       const newId = Date.now();
       localStorage.setItem(newId, JSON.stringify({ 
-        lyric: lyricFirstValue, 
+        lyrics: lyricsFirstValue, 
         jimakuFontSize: '42pt', 
         movieUrl: '', 
         tags: '', 
@@ -173,11 +186,12 @@ const jimac = Vue.createApp({
       this.jimakuOutline = settings.jimakuOutline;
       this.preview = settings.preview;
       this.activationCode = settings.activationCode;
+      this.isActivated = settings.isActivated;
     },
     loadSong(id) {
       const data = this.getSong(id);
       this.selectedSong = id;
-      this.lyric = data.lyric;
+      this.lyrics = data.lyrics;
       this.jimakuFontSize = data.jimakuFontSize;
       this.movieUrl = data.movieUrl;
       this.tags = data.tags;
@@ -192,11 +206,12 @@ const jimac = Vue.createApp({
         jimakuOutline: this.jimakuOutline,
         preview: this.preview,
         activationCode: this.activationCode,
+        isActivated: this.isActivated,
       }));
     },
     saveSong() {
       localStorage.setItem(this.selectedSong, JSON.stringify({ 
-        lyric: this.lyric, 
+        lyrics: this.lyrics, 
         jimakuFontSize: this.jimakuFontSize, 
         movieUrl: this.movieUrl, 
         tags: this.tags, 
@@ -218,7 +233,7 @@ const jimac = Vue.createApp({
       this.repertory = this.songIds.map( id => {
         return {
           id,
-          title: this.getSong(id).lyric.split('\n')[0],
+          title: this.getSong(id).lyrics.split('\n')[0],
           tags: this.getSong(id).tags,
         };
       });
@@ -245,12 +260,12 @@ const jimac = Vue.createApp({
       this.jimakuIndex = (0 <= i &&  i < this.splitedLyrics.length) ? i : 0;
     },
 
-    updateJimakuIndexToCursor() { // 字幕行番号をカーソルの位置に更新 #lyric@focus@click
-      const match = this.lyric.substr(0, $('#lyric').prop('selectionStart')).match(/\n/g);
+    updateJimakuIndexToCursor() { // 字幕行番号をカーソルの位置に更新 #lyrics@focus@click
+      const match = this.lyrics.substr(0, $('#lyrics').prop('selectionStart')).match(/\n/g);
       this.jimakuIndex = match ? match.length : 0;
     },
 
-    moveEditorCousor(e) { // 字幕の行番号を更新 #lyric@keyup
+    moveEditorCousor(e) { // 字幕の行番号を更新 #lyrics@keyup
       if ([13,37,38,39,40].includes(e.keyCode)) { // 十字キーまたはエンターを押した時
         this.updateJimakuIndexToCursor();
       }
@@ -262,7 +277,7 @@ const jimac = Vue.createApp({
     },
 
     deleteSong() { // データ消去
-      if (this.lyric !== lyricFirstValue && !confirm('本当に消去しますか？')) {
+      if (this.lyrics !== lyricsFirstValue && !confirm('本当に消去しますか？')) {
         return;
       }
 

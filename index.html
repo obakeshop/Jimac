@@ -178,21 +178,21 @@
                   <div>
 
                     <!-- Create -->
-                    <button v-if="!isLocked" class="button is-info is-small is-outlined songCtrl" @click="addSong" @mouseover="hint('曲を追加します' + (isActivated ? '' : '(無料版は5曲まで)'))"><i class="fas fa-plus"></i></button>
-                    <a v-if="isLocked" href="https://booth.pm/ja" target="_blank" class="button is-info is-small is-outlined songCtrl" @mouseover="hint('5曲以上はアクティベーションが必要です(クリックで購入サイト)')"><i class="fas fa-lock"></i></a>
+                    <button v-if="!isLocked" class="button is-info is-small is-outlined songCtrl" @click="addSong" @mouseover="hint('曲を追加します。' + (isActivated ? '' : '(無料版は5曲まで)'))"><i class="fas fa-plus"></i></button>
+                    <a v-if="isLocked" href="https://booth.pm/ja" target="_blank" class="button is-info is-small is-outlined songCtrl" @mouseover="hint('5曲以上はアクティベーションが必要です。(クリックで購入サイト)')"><i class="fas fa-lock"></i></a>
                     
                     <!-- Cross Change -->
-                    <button class="button is-info is-small is-outlined songCtrl" @click="shiftSongForFilteredRepertory(-1)" :disabled="!canShiftUp" @mouseover="hint('1つ上の曲と順番を入れ替えます')"><i class="fas fa-chevron-up"></i></button>
-                    <button class="button is-info is-small is-outlined songCtrl" @click="shiftSongForFilteredRepertory(+1)" :disabled="!canShiftDown" @mouseover="hint('1つ下の曲と順番を入れ替えます')"><i class="fas fa-chevron-down"></i></button>
+                    <button class="button is-info is-small is-outlined songCtrl" @click="shiftSongForFilteredRepertory(-1)" :disabled="!canShiftUp" @mouseover="hint('1つ上の曲と順番を入れ替えます。')"><i class="fas fa-chevron-up"></i></button>
+                    <button class="button is-info is-small is-outlined songCtrl" @click="shiftSongForFilteredRepertory(+1)" :disabled="!canShiftDown" @mouseover="hint('1つ下の曲と順番を入れ替えます。')"><i class="fas fa-chevron-down"></i></button>
 
                     <!-- Delete -->
-                    <button class="button is-info is-small is-outlined songCtrl" @click="deleteSong" @mouseover="hint('選択中の曲を削除します')"><i class="fas fa-trash-alt"></i></button>
+                    <button class="button is-info is-small is-outlined songCtrl" @click="deleteSong" @mouseover="hint('選択中の曲を削除します。')"><i class="fas fa-trash-alt"></i></button>
 
                     <!-- Copy Repertory -->
-                    <button class="button is-info is-small is-outlined songCtrl clipboard" :data-clipboard-text="filteredRepertory.map(r => r.title).join(`\n`)" @mouseover="hint('検索中の曲リストをクリップボードにコピーします')"><i class="fas fa-copy"></i></button>
+                    <button class="button is-info is-small is-outlined songCtrl clipboard" :data-clipboard-text="filteredRepertory.map(r => r.title).join(`\n`)" @mouseover="hint('検索中の曲リストをクリップボードにコピーします。')"><i class="fas fa-copy"></i></button>
 
                     <!-- Activate -->
-                    <div class="field is-info is-small is-outlined songCtrl" style="width:89px; display: inline-block;" @mouseover="hint( isActivated ? '今は有料版です（ご購入ありがとうございます！）' : '今は無料版です' )">
+                    <div class="field is-info is-small is-outlined songCtrl" style="width:89px; display: inline-block;" @mouseover="hint( isActivated ? '今は有料版です。（ご購入ありがとうございます！）' : '今は無料版です' )">
                       <div class="control has-icons-left has-icons-right">
                         <input class="input is-info is-small is-outlined" style="padding-right: .8rem;" type="password" v-model="activationCode">
                         <span class="icon is-small is-left">
@@ -224,14 +224,14 @@
               <div class="tile is-parent is-5" style="padding-left: 0; padding-right: 0;">
                 <article class="tile is-child is-info">
 
-                  <!-- lyricEditor -->
-                  <div class="paper" @mouseover="hint('歌詞を登録します（先頭行がタイトルになります）')">
+                  <!-- lyricsEditor -->
+                  <div class="paper" @mouseover="hint('歌詞を登録します。（先頭行がタイトルになります）' + (splitedLyrics.length > 70 && !isActivated ? '※無料版は70行までです。' : ''))">
                     <div class="paper-content">
                         <textarea
-                          id="lyric"
+                          id="lyrics"
                           autofocus
                           contenteditable 
-                          v-model="lyric"
+                          v-model="lyrics"
                           @click="updateJimakuIndexToCursor"
                           @keyup="moveEditorCousor"></textarea>
                     </div>
@@ -247,7 +247,7 @@
                       <!-- video -->
                       <div id="video"></div>
 
-                      <div class="field" @mouseover="hint('YouTubeまたはニコニコの動画を登録できます')">
+                      <div class="field" @mouseover="hint('YouTubeまたはニコニコの動画を登録できます。')">
                         <div class="control has-icons-left has-icons-right">
                           <input class="input is-small" type="text" v-model="movieUrl" placeholder="Movie URL (YouTube or niconico)">
                           <span class="icon is-small is-left">
@@ -257,7 +257,7 @@
                       </div>
 
                       <!-- Tags -->
-                      <div class="field" @mouseover="hint('検索に使えるタグを設定します')">
+                      <div class="field" @mouseover="hint('検索に使えるタグを設定します。' + (tags.length > 19 && !isActivated ? '※無料版は20文字までです' : ''))">
                         <div class="control has-icons-left has-icons-right">
                           <input class="input is-small" type="text" v-model="tags" placeholder="#tags">
                           <span class="icon is-small is-left">
@@ -506,7 +506,7 @@
     </div>
   </div>
 
-  <!-- Lyrics Copyright Modal -->
+  <!-- lyrics Copyright Modal -->
   <div class="modal_wrap">
     <input id="lyricsCopyrightModalTrigger" type="checkbox">
       <div class="modal_overlay">
