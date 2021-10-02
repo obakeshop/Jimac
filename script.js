@@ -289,7 +289,18 @@ const jimakuGenerator = Vue.createApp({
     },
 
     repertoryFiltering() {
-      this.filteredRepertory = this.repertory.filter(r => (r.title+r.tags).indexOf(this.searchText) > -1);
+      let filteredRepertory = this.repertory;
+      this.searchText.split(" ").forEach(word => {
+        if (!word || word === "-") {
+          return;
+        }
+        const isInverted = word.split("")[0] === "-";
+        filteredRepertory = filteredRepertory.filter(r => {
+          const matched = (r.title+r.tags).indexOf(isInverted ? word.substr(1) : word) > -1;
+          return isInverted ? !matched : matched; // 先頭 "-" でマイナス検索
+        });
+      });
+      this.filteredRepertory = filteredRepertory;
     },
 
     shiftSongForFilteredRepertory(dist) {
