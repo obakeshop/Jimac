@@ -1,14 +1,15 @@
 'use strict'
-const lyricTemplate = `曲名 / アーティスト
+const lyricFirstValue = `曲名 / アーティスト
 
 ここに歌詞を貼り付けます`;
+
 const activationHashes = [
   '962540c1187c0cd1d4a624c124b3842d61ef1654a4957d5afa4bdbd8bf4e561d',
   '2cdc1139506cd061a18ccf12e99f9bee6f16a75a9f371906ce94386180cb5d6c',
   '029b2ecc824c018d8a3ff3998aaa8e82024a24f6952ee993aaf27e9a4ef22c7e',
 ];
 
-const jimakuGenerator = Vue.createApp({
+const jimac = Vue.createApp({
   data() {
     return {
       songIds: [], // 曲一覧
@@ -19,10 +20,10 @@ const jimakuGenerator = Vue.createApp({
       jimaku: '', // 字幕テキスト
       previewText: '', // ヒントテキスト
       jimakuIndex: 0, // 字幕の行番号
-      jimakuBackColor: "#00FF00", // 字幕の背景色
-      jimakuTextColor: "#3333FF", // 字幕のテキストカラー
-      jimakuFontFamily: "'Kiwi Maru', serif", // 字幕フォントファミリー
-      jimakuFontSize: "42pt", // 字幕フォントサイズ
+      jimakuBackColor: "", // 字幕の背景色
+      jimakuTextColor: "", // 字幕のテキストカラー
+      jimakuFontFamily: "", // 字幕フォントファミリー
+      jimakuFontSize: "", // 字幕フォントサイズ
       jimakuAnim: "none", // 字幕をアニメーションさせるか
       jimakuOutline: true, // 字幕の縁取り
       preview: false, // プレビューモード
@@ -148,7 +149,7 @@ const jimakuGenerator = Vue.createApp({
     createSong() {
       const newId = Date.now();
       localStorage.setItem(newId, JSON.stringify({ 
-        lyric: lyricTemplate, 
+        lyric: lyricFirstValue, 
         jimakuFontSize: '42pt', 
         movieUrl: '', 
         tags: '', 
@@ -261,7 +262,7 @@ const jimakuGenerator = Vue.createApp({
     },
 
     deleteSong() { // データ消去
-      if (this.lyric !== lyricTemplate && !confirm('本当に消去しますか？')) {
+      if (this.lyric !== lyricFirstValue && !confirm('本当に消去しますか？')) {
         return;
       }
 
@@ -327,11 +328,11 @@ const jimakuGenerator = Vue.createApp({
     })
   },
 
-}).mount('#jimakuGenerator');
+}).mount('#jimac');
 
 // ショートカットキー用のイベント取得
 $(window).keyup(function(event) {
-  jimakuGenerator.windowKeyEvent(event);
+  jimac.windowKeyEvent(event);
 });
 
 async function sha256(str) {
