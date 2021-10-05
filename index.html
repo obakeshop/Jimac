@@ -106,7 +106,7 @@
                 <option value="'Yusei Magic', sans-serif">Yusei Magic</option>
                 <option value="'Hachi Maru Pop', cursive">Hachi Maru Pop</option>
                 <template v-if="isActivated">
-                  <option value="'Shippori Mincho B1', serif">Shippori Mincho B1</option>
+                  <option value="'Shippori Mincho B1', serif">Shippori Mincho</option>
                   <option value="'Klee One', cursive">Klee One</option>
                   <option value="'Kosugi Maru', sans-serif">Kosugi Maru</option>
                   <option value="'Yomogi', cursive">Yomogi</option>
@@ -301,24 +301,22 @@
           <div style="height: 15%; overflow: scroll;">
             <label for="howToModalTrigger" class="close_button">✖️</label>
 
-            <div class="">
+            <div>
               <p>
                 <a href="#howto_jimac">Jimacとは？</a> /
-                <a href="#howto_sample">利用シーンのサンプル</a> /
                 <a href="#howto_settings">配信ツールの設定 (OBS)</a> /
                 <a href="#howto_lyrics">歌詞ボード</a> /
                 <a href="#howto_jimaku_shifter">字幕の切り替え</a> /
                 <a href="#howto_jimaku_color">背景色、文字色</a> /
                 <a href="#howto_jimaku_font">フォント</a> /
-                <a href="#howto_jimaku_decolate">縁取り、アニメーション</a> /
-                <a href="#howto_jimaku_preview">歌詞プレビュー</a> /
-                <a href="#howto_search">楽曲検索 [フィルタ]</a> /
-                <a href="#howto_repertory">楽曲の追加、並び替え、削除</a> /
+                <a href="#howto_jimaku_decolate">文字装飾と演出</a> /
+                <a href="#howto_jimaku_preview">プレビュー</a> /
+                <a href="#howto_search">楽曲検索</a> /
+                <a href="#howto_repertory">楽曲管理</a> /
                 <a href="#howto_movie">動画プレーヤー</a> /
                 <a href="#howto_tags">タグ</a> /
                 <a href="#howto_activation">有料版の機能</a> /
-                <a href="#howto_data_buckup_restore">データバックアップ</a> /
-                <a href="#howto_data_policy">データの取り扱い</a> /
+                <a href="#howto_data_buckup_restore">データバックアップ</a>
               </p>
             </div>
           </div>
@@ -428,7 +426,7 @@
             </div>
 
             <div id="howto_jimaku_decolate" class="mt-5">
-              <h5 class="title is-5">縁取り、アニメーション</h5>
+              <h5 class="title is-5">文字装飾と演出</h5>
               <p>
                 字幕切り替え時のアニメーションを設定したり、テキストに縁取りを施すことができます。<br>
                 <br>
@@ -466,7 +464,7 @@
             </div>
 
             <div id="howto_search" class="mt-5">
-              <h5 class="title is-5">楽曲検索 [フィルタ]</h5>
+              <h5 class="title is-5">楽曲検索（フィルタ）</h5>
               <p>
                 楽曲のタイトル（歌詞の一行目）と登録された<a href="#howto_tags">タグ</a>から楽曲検索[フィルタ]を行えます。<br>
                 複数の単語で検索したい場合はスペースで区切ります。（AND検索になります）<br>
@@ -486,7 +484,7 @@
               <div class="modal-image">
                 <p class="has-text-centered"><img src="img/howto/jimaku_repertory_1.png"></p>
               </div>
-              <h5 class="title is-5">楽曲の追加/並び替え/削除</h5>
+              <h5 class="title is-5">楽曲管理</h5>
               <p>
                 [<i class="fas fa-plus"></i>] 楽曲を追加します。6曲目以降は<a href="#howto_activation">有料版へのアクティベート</a>が必要です。<br>
                 [<i class="fas fa-chevron-up"></i>] [<i class="fas fa-chevron-down"></i>] 選択中の楽曲を1つ上または下の(表示中の)楽曲と位置を入れ替えます。<br>
@@ -505,12 +503,7 @@
                 練習用のカラオケ動画や、二次利用可能な音源などを登録してお使いください。
               </p>
               <div class="modal-image">
-                <p class="has-text-centered"><img src="img/howto/jimaku_movie_yt.png"></p>
-                <p class="has-text-centered">YouTube</p>
-              </div>
-              <div class="modal-image">
-                <p class="has-text-centered"><img src="img/howto/jimaku_movie_nico.png"></p>
-                <p class="has-text-centered">ニコニコ動画</p>
+                <p class="has-text-centered"><img src="img/howto/jimaku_movie.png"></p>
               </div>
               <p class="has-text-right is-size-7">引用: <a href="https://www.nicovideo.jp/watch/sm29822304" target="_blank">シャルル／flower</a></p>
             </div>
@@ -576,37 +569,51 @@
     <input id="termsModalTrigger" type="checkbox">
       <div class="modal_overlay">
         <label for="termsModalTrigger" class="modal_trigger"></label>
-        <div class="modal_content">
-          <label for="termsModalTrigger" class="close_button">✖️</label>
-          <h2 class="subtitle">利用規約</h2>
-          
-          <h5 class="title is-5">定義</h5>
-          <p>
-            この利用規約は、小栗さえ（以下「運営者」と言います）が提供する「Jimac」（以下「当サービス」と言います）において、運営者と当サービスを利用する利用者（以下「利用者」と言います）の間で合意されるものです。<br>
-            利用者は、本規約に同意をしない限り当サービスを利用できません。当サービスを実際に利用することによって、本規約に同意をしたものとみなされます。<br>
-            本利用規約の準拠法は日本法とし、運営者と利用者の間で訴訟の必要が生じた場合、東京地方裁判所を第一審の専属的合意管轄裁判所とします。<br>
-            運営者は、本利用規約について、事前に当サービス上で十分な周知を行うことで、利用者の同意を得ず、改定できるものとします。
-          </p>
+        <div class="modal_content container" style="height: 90%; max-width: 1000px;">
+          <div style="height: 100%; overflow: scroll;">
+            <label for="termsModalTrigger" class="close_button">✖️</label>
+            <h2 class="title is-2">利用規約</h2>
+              
+            <div class="mt-5">
+              <h5 class="title is-5">定義</h5>
+              <p>
+                この利用規約は、小栗さえ（以下「運営者」と言います）が提供する「Jimac」（以下「当サービス」と言います）において、運営者と当サービスを利用する利用者（以下「利用者」と言います）の間で合意されるものです。<br>
+                利用者は、本規約に同意をしない限り当サービスを利用できません。当サービスを実際に利用することによって、本規約に同意をしたものとみなされます。<br>
+                本利用規約の準拠法は日本法とし、運営者と利用者の間で訴訟の必要が生じた場合、東京地方裁判所を第一審の専属的合意管轄裁判所とします。<br>
+                運営者は、本利用規約について、事前に当サービス上で十分な周知を行うことで、利用者の同意を得ず、改定できるものとします。
+              </p>
+            </div>
 
-          <h5 class="title is-5">サービスの提供</h5>
-          <p>
-            運営者は、あらかじめ利用者に通知することなく、いつでも当サービスの全部または一部の内容を変更し、その提供を中止することができます。<br>
-            運営者は、当サービスに運営者または第三者の広告を掲載することができるものとします。<br>
-            運営者は、当サービスに起因して利用者に生じたあらゆる損害について一切の責任を負いません。<br>
-          </p>
+            <div class="mt-5">
+              <h5 class="title is-5">サービスの提供</h5>
+              <p>
+                運営者は、あらかじめ利用者に通知することなく、いつでも当サービスの全部または一部の内容を変更し、その提供を中止することができます。<br>
+                運営者は、当サービスに運営者または第三者の広告を掲載することができるものとします。<br>
+                運営者は、当サービスに起因して利用者に生じたあらゆる損害について一切の責任を負いません。
+              </p>
+            </div>
 
-          <h5 class="title is-5">利用者の責任とコンテンツの権利</h5>
-          <p>
-            利用者は、利用者の責任において当サービスを利用するものとし、当サービスにおいて行った一切の行為およびその結果について一切の責任を負うものとします。
-            利用者は、当サービスを利用したことに起因して、運営者が直接的もしくは間接的に何らかの損害を被った場合、運営者の請求にしたがって直ちにこれを補償しなければなりません。
-          </p>
+            <div class="mt-5">
+              <h5 class="title is-5">利用者の責任とコンテンツの権利</h5>
+              <p>
+                利用者は、利用者の責任において当サービスを利用するものとし、当サービスにおいて行った一切の行為およびその結果について一切の責任を負うものとします。<br>
+                利用者は、当サービスを利用したことに起因して、運営者が直接的もしくは間接的に何らかの損害を被った場合、運営者の請求にしたがって直ちにこれを補償しなければなりません。
+              </p>
+            </div>
 
-          <h5 class="title is-5">禁止事項</h5>
-          <p>
-            利用者は、アクティベートに必要なコード
-          </p>
+            <div class="mt-5">
+              <h5 class="title is-5">禁止事項</h5>
+              <p>
+                利用者は、BOOTHで購入したアクティベートに必要なコードを第三者に販売、譲渡、共有することはできません。<br>
+                利用者は、BOOTHで購入したアクティベートに必要なコードを公衆に公開することはできません。<br>
+                利用者は、Jimacの開発に貢献する目的以外で、システムのソースコードを改変して有料機能を使用することはできません。<br>
+                利用者は、Jimacのソースコードを個人でホスティングし、第三者にJimacの機能を提供することはできません。<br>
+                利用者は、自動化されたプログラムなどを介してJimacのシステムに機械的にアクセスすることはできません。<br>
+              </p>
+            </div>
 
           </div>
+        </div>
       </div>
     </div>
   </div>
@@ -616,11 +623,63 @@
     <input id="privacyPolicyTrigger" type="checkbox">
       <div class="modal_overlay">
         <label for="privacyPolicyTrigger" class="modal_trigger"></label>
-        <div class="modal_content">
-          <label for="privacyPolicyTrigger" class="close_button">✖️</label>
-          <h2 class="subtitle">歌詞の著作権について</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
-        </div>
+        <div class="modal_content container" style="height: 90%; max-width: 1000px;">
+          <div style="height: 100%; overflow: scroll;">
+            <label for="termsModalTrigger" class="close_button">✖️</label>
+            <h2 class="title is-2">プライバシーポリシー</h2>
+            
+            <div class="mt-5">
+              <h5 class="title is-5">Jimacに登録されたデータについて</h5>
+              <p>
+                Jimacに登録された歌詞データはブラウザのローカルストレージに保存され、サーバーに送信されません。<br>
+                ブラウザのキャッシュクリアやPCの買い替えなどによりデータを失うと復元できなくなるため、データのバックアップを行いたい場合はサービス下部『使い方』にある、『データのバックアップ』の項にて手動でバックアップを行ってください。
+              </p>
+            </div>
+
+            <div class="mt-5">
+              <h5 class="title is-5">Cookie</h5>
+              <p>
+                本サービスではログイン状態の確認、ユーザー利便性の向上、トラフィックデータ収集、広告配信のためにCookieを利用しています。<br>
+                <br>
+                Cookieを利用する外部サービス以下になります。<br>
+                - Google Analytics<br>
+                - Google AdSense<br>
+                <br>
+                ユーザーはブラウザの設定によりCookieの送信を拒否することができます。<br>
+                Jimacから収集した情報の GOOGLE による使用については
+                <a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank" rel="noopener">こちら</a>
+                をご覧ください。<br>
+              </p>
+            </div>
+
+            <div class="mt-5">
+              <h5 class="title is-5">Google Analytics</h5>
+              <p>
+                Jimacではサイトの改善を行なうため、Google Analyticsを利用しています。<br>
+                <br>
+                ユーザーはディスプレイ広告に対応する
+                  <a href="https://tools.google.com/dlpage/gaoptout/" target="_blank" rel="noopener">Googleアナリティクス機能によるデータ収集を無効化</a>
+                することや、
+                <a href="https://adssettings.google.com/u/0/authenticated?hl=ja" target="_blank" rel="noopener">広告設定</a>
+                を使用してGoogleディスプレイネットワークで表示される広告をカスタマイズすることができます。<br>
+              </p>
+            </div>
+
+            <div class="mt-5">
+              <h5 class="title is-5">Google AdSense</h5>
+              <p>
+                Google AdSenseではCookieを使用して、本サービスや他のサービスへの過去のアクセス情報に基づいてGoogleを含む第三者配信事業者が広告を配信します。<br>
+                <br>
+                ユーザーは
+                <a href="http://www.google.com/ads/preferences/" target="_blank" rel="noopener">Ads Preferences Manager</a>
+                で、インタレスト ベースでの広告掲載に使用される DoubleClick Cookie を無効にできます。
+                <a href="http://www.aboutads.info/" target="_blank" rel="noopener">aboutads.infoページ</a>
+                では、インタレストベースでの広告掲載に使用される第三者配信事業者の Cookie を無効にできます。
+              </p>
+            </div>
+
+          </div>
+
       </div>
     </div>
   </div>
