@@ -51,7 +51,7 @@ const jimac = Vue.createApp({
       return `https://embed.nicovideo.jp/watch/${nicoId}/script?w=408&h=230`;
     },
     isLocked: function() {
-      return this.songIds.length >= 5 && !this.isActivated 
+      return this.songIds.length >= 5 && !this.isActivated;
     }
   },
 
@@ -154,9 +154,13 @@ const jimac = Vue.createApp({
         jimakuAnim: "none",
         jimakuOutline: true,
         preview: false,
+      }));
+      
+      localStorage.setItem("activation", JSON.stringify({
         activationCode: '',
         isActivated: false,
       }));
+
       this.loadSettings();
     },
     createSong() {
@@ -185,8 +189,10 @@ const jimac = Vue.createApp({
       this.jimakuAnim = settings.jimakuAnim;
       this.jimakuOutline = settings.jimakuOutline;
       this.preview = settings.preview;
-      this.activationCode = settings.activationCode;
-      this.isActivated = settings.isActivated;
+
+      const activation = JSON.parse(localStorage.getItem("activation"));
+      this.activationCode = activation.activationCode;
+      this.isActivated = activation.isActivated;
     },
     loadSong(id) {
       const data = this.getSong(id);
@@ -205,9 +211,13 @@ const jimac = Vue.createApp({
         jimakuAnim: this.jimakuAnim,
         jimakuOutline: this.jimakuOutline,
         preview: this.preview,
+      }));
+      
+      localStorage.setItem("activation", JSON.stringify({
         activationCode: this.activationCode,
         isActivated: this.isActivated,
       }));
+
     },
     saveSong() {
       localStorage.setItem(this.selectedSong, JSON.stringify({ 
@@ -331,7 +341,9 @@ const jimac = Vue.createApp({
     dataExport() {
       var result = {};
       for(var i = 0; i < localStorage.length; i++) {
-        result[localStorage.key(i)] = localStorage.getItem(localStorage.key(i));
+        if (localStorage.key(i) !== "activation") {
+          result[localStorage.key(i)] = localStorage.getItem(localStorage.key(i));
+        }
       }
       const blob = new Blob([JSON.stringify(result)], { type: 'application/octet-stream' });
       const aTag = document.createElement('a');
@@ -355,7 +367,7 @@ const jimac = Vue.createApp({
     },
 
     dataReset() {
-      if (confirm("本当にデータを消去しますか？")) {
+      if (confirm("本当に消去しますか？")) {
         localStorage.clear();
         location.reload();
       }

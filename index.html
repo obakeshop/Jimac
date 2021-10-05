@@ -173,7 +173,7 @@
                   </div>
                   
                   <!-- Repertory -->
-                  <div class='tile is-child songs' style=" height: 265px;">
+                  <div class='tile is-child songs' :style="`height: ${isActivated ? '447' : '265'}px;`">
                     <div v-for="song in filteredRepertory"
                       class="button is-info is-light song "
                       :class="{ 'is-active': song.id === selectedSong }"
@@ -611,6 +611,7 @@
                 <div class="content">
                   <ul>
                     <li>楽曲を6曲以上追加/管理可能になります。</li>
+                    <li>楽曲一覧下部のバナー広告が無くなります。</li>
                     <li>歌詞を70行以上登録可能になります。</li>
                     <li>タグを合計20文字以上登録可能になります。</li>
                     <li>追加のフォント11種を利用できるようになります。</li>
