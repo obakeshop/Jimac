@@ -326,6 +326,39 @@ const jimac = Vue.createApp({
 
     hint(message) {
       this.hintText = message;
+    },
+    
+    dataExport() {
+      var result = {};
+      for(var i = 0; i < localStorage.length; i++) {
+        result[localStorage.key(i)] = localStorage.getItem(localStorage.key(i));
+      }
+      const blob = new Blob([JSON.stringify(result)], { type: 'application/octet-stream' });
+      const aTag = document.createElement('a');
+      aTag.href = URL.createObjectURL(blob);
+      aTag.target = '_blank';
+      aTag.download = `jimac_export_${Date.now()}.json`;
+      aTag.click();
+      URL.revokeObjectURL(aTag.href);
+    },
+    
+    dataImport(e) {
+      const r = new FileReader();
+      r.readAsText(e.files[0]);
+      r.onload = () => {
+        const datas = JSON.parse(r.result);
+        for (const key in datas) {
+          localStorage.setItem(key, datas[key]);
+        }
+        location.reload();
+      };
+    },
+
+    dataReset() {
+      if (confirm("本当にデータを消去しますか？")) {
+        localStorage.clear();
+        location.reload();
+      }
     }
   },
 

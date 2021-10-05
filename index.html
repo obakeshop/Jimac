@@ -30,7 +30,7 @@
 <body>
   <section>
     <div id="jimac" class="container is-fullhd">
-      <h1 class="title">Jimac<span class="is-size-4"> - 歌枠字幕ジェネレータ - </span></h1>
+      <h1 class="title">Jimac<span class="is-size-4"> - 歌枠字幕ジェネレータ - <span style="color: rgb(104, 104, 104);">{{(isActivated ? '[有料版]' : '')}}</span> </span></h1>
       <div id="jimakuPane" class="section">
 
         <!-- Jimaku preview -->
@@ -173,7 +173,7 @@
                   </div>
                   
                   <!-- Repertory -->
-                  <div class='tile is-child songs'>
+                  <div class='tile is-child songs' style=" height: 265px;">
                     <div v-for="song in filteredRepertory"
                       class="button is-info is-light song "
                       :class="{ 'is-active': song.id === selectedSong }"
@@ -217,14 +217,14 @@
                 </div>
 
                 <!-- Off-Vocal Finder banner -->
-                <div>
+                <div v-show="!isActivated">
                   <a class="tile has-text-centered banner" href="https://okurisae.github.io/off-vocal-finder/" target="_blank">
                     <img src="img/ovf_banner.png"></img>
                   </a>
                 </div>
 
                 <!-- Meish banner -->
-                <div>
+                <div v-show="!isActivated">
                   <a class="tile has-text-centered banner" href="https://www.meish.me/" target="_blank">
                     <img src="img/meish_banner.png"></img>
                   </a>
@@ -315,8 +315,7 @@
                 <a href="#howto_repertory">楽曲管理</a> /
                 <a href="#howto_movie">動画プレーヤー</a> /
                 <a href="#howto_tags">タグ</a> /
-                <a href="#howto_activation">有料版の機能</a> /
-                <a href="#howto_data_buckup_restore">データバックアップ</a>
+                <a href="#howto_data_buckup_restore">データのバックアップと復元</a>
               </p>
             </div>
           </div>
@@ -523,25 +522,6 @@
               </div>
             </div>
 
-            <div id="howto_activation" class="mt-5">
-              <h5 class="title is-5">有料版の機能</h5>
-              <p>
-                Jimac有料版は <a href="">BOOTH</a> にて1,000円で購入いただけます。<br>
-                楽曲一覧部右下にある [<i v-if="isActivated" class="fas fa-lock"></i>] マークの入ったフォームに購入したコードを入力してアクティベートしてください。
-              </p>
-              <div class="modal-image">
-                <p class="has-text-centered"><img src="img/howto/jimaku_activate.png"></p>
-              </div>
-              <p>
-                有料版にアクティベートされると以下の機能が解放されます。<br>
-
-                - 楽曲を6曲以上追加/管理可能になります。<br>
-                - 歌詞を70行以上登録可能になります。<br>
-                - タグを合計20文字以上登録可能になります。<br>
-                - 追加のフォント10種を利用できるようになります。
-              </p>
-            </div>
-
             <div id="howto_data_buckup_restore" class="mt-5">
               <h5 class="title is-5">データの取り扱いとバックアップ</h5>
               <p>
@@ -549,17 +529,107 @@
                 データのバックアップやデータ移行、データのインポートは下記より行えます。
               </p>
               <div class="columns has-text-centered m-2">
+
                 <div class="column is-6">
-                  <div class="button is-primary" style="width: 300px;">データのバックアップ</div>
+                  <div class="button is-info" onclick="jimac.dataExport()">
+                    <span class="file-icon">
+                      <i class="fas fa-download"></i>
+                    </span>
+                    <span class="file-label">
+                      データのバックアップ
+                    </span>
+                  </div>
                 </div>
+
                 <div class="column is-6">
-                  <div class="button is-primary" style="width: 300px;">データのインポート</div>
+                  <div class="file is-centered is-info">
+                    <label class="file-label">
+                      <input class="file-input" onchange="jimac.dataImport(this)" type="file" name="resume">
+                      <span class="file-cta mx-auto" style="border-radius: 8px;">
+                        <span class="file-icon">
+                          <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">
+                          データのインポート
+                        </span>
+                      </span>
+                    </label>
+                  </div>
                 </div>
+
+              </div>
+
+              <h5 class="title is-5">データの消去</h5>
+              <p>
+                データが壊れたり、通常通り利用できない場合にお試しください。（注：復元できません）
+              </p>
+              
+              <div class="columns has-text-centered m-2">
+
+                <div class="column is-12">
+                  <div class="button is-danger" onclick="jimac.dataReset()">
+                    <span class="file-icon">
+                      <i class="fas fa-trash"></i>
+                    </span>
+                    <span class="file-label">
+                      データの初期化
+                    </span>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
 
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activate  Modal -->
+  <div class="modal_wrap">
+    <input id="activateTrigger" type="checkbox">
+      <div class="modal_overlay">
+        <label for="activateTrigger" class="modal_trigger"></label>
+        <div class="modal_content container" style="height: 60%; max-width: 1000px;">
+          <div style="height: 100%; overflow: scroll;">
+            <label for="activateTrigger" class="close_button">✖️</label>
+            <h2 class="title is-2">Jimacの有料化</h2>
+            
+            <div class="mt-5">
+              <p>
+                Jimac有料版は <a href="">BOOTH</a> にて1,000円で購入いただけます。<br>
+                楽曲一覧部右下にある [<i v-if="isActivated" class="fas fa-lock"></i>] マークの入ったフォームに購入したコードを入力してアクティベートしてください。
+              </p>
+              <div class="modal-image">
+                <p class="has-text-centered"><img src="img/howto/jimaku_activate.png"></p>
+              </div>
+              
+              <h5 class="title is-5">有料版の機能</h5>
+              <p>
+                有料版にアクティベートされると以下の機能が解放されます。
+                <div class="content">
+                  <ul>
+                    <li>楽曲を6曲以上追加/管理可能になります。</li>
+                    <li>歌詞を70行以上登録可能になります。</li>
+                    <li>タグを合計20文字以上登録可能になります。</li>
+                    <li>追加のフォント11種を利用できるようになります。</li>
+                  </ul>
+                </div>
+              </p>
+              
+              <div class="columns has-text-centered m-1">
+                <div class="column">
+                  <div class="button is-info" style="width: 320px;">
+                    <i class="fas fa-external-link-alt"> Jimac 有料版購入ページ [BOOTH]</i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+
       </div>
     </div>
   </div>
@@ -625,7 +695,7 @@
         <label for="privacyPolicyTrigger" class="modal_trigger"></label>
         <div class="modal_content container" style="height: 90%; max-width: 1000px;">
           <div style="height: 100%; overflow: scroll;">
-            <label for="termsModalTrigger" class="close_button">✖️</label>
+            <label for="privacyPolicyTrigger" class="close_button">✖️</label>
             <h2 class="title is-2">プライバシーポリシー</h2>
             
             <div class="mt-5">
@@ -689,6 +759,7 @@
     <div class="content has-text-centered">
       <p>
         <a><label for="howToModalTrigger">使い方</label></a> | 
+        <a><label for="activateTrigger">有料版の購入</label></a> | 
         <a><label for="termsModalTrigger">利用規約</label></a> | 
         <a><label for="privacyPolicyTrigger">プライバシーポリシー</label></a>
         <br>
