@@ -377,9 +377,10 @@ const jimac = Vue.createApp({
   /** Initialize **/
   mounted: function() {
     this.$nextTick(function() {
-      if (!localStorage.length) {
+      if (!localStorage.getItem("settings")) {
         this.createSettings();
         this.createSong();
+        $("#howToModalTrigger").prop('checked', true);
       } else {
         this.loadSettings();
         this.loadRepertory();
