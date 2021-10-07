@@ -23,6 +23,16 @@
   <!-- Clipboard -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.8/clipboard.min.js"></script>
   
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RMB5ZF3F9H"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-RMB5ZF3F9H');
+  </script>
+
   <link rel="stylesheet" href="style.css">
 
 </head>
@@ -160,7 +170,7 @@
             <div class="tile">
               <div class="tile is-parent is-3 is-vertical repertory">
 
-                <div class="tile is-child notification" style="margin-bottom: .75rem !important;">
+                <div class="tile is-child notification" :style="`margin-bottom: ${isActivated ? '0' : '.75'}rem !important;`">
 
                   <!-- Search -->
                   <div class="field" @mouseover="hint('タイトルまたはタグで検索ができます')">
@@ -328,8 +338,32 @@
               <h5 class="title is-5">Jimacとは？</h5>
               <p>
                 Jimacは、歌枠や歌ってみたの字幕オーバーレイ素材をお手軽に作れるWebツールです。<br>
-                カラーやフォントの変更、縁取りなど多彩な装飾機能を備え、レパートリーの管理や検索なども行えます。
+                カラーやフォントの変更、縁取りなど多彩な装飾機能を備え、レパートリーの管理や検索なども行えます。<br>
               </p>
+
+              <div class="columns has-text-centered m-2">
+                <div class="column is-6">
+                  <a class="button is-primary" href="https://twitter.com/search?q=%23jimac&src=typed_query" target="_blank">
+                    <span class="file-icon">
+                      <i class="fas fa-search"></i>
+                    </span>
+                    <span class="file-label">
+                      YouTubeでJimacを検索
+                    </span>
+                  </a>
+                </div>
+                <div class="column is-6">
+                  <a class="button is-primary" href="https://www.youtube.com/hashtag/jimac" target="_blank">
+                    <span class="file-icon">
+                      <i class="fas fa-search"></i>
+                    </span>
+                    <span class="file-label">
+                      TwitterでJimacを検索
+                    </span>
+                  </a>
+                </div>
+              </div>
+
               <div class="modal-image">
                 <p class="has-text-centered"><img src="img/howto/sample1.png"></p>
               </div>
@@ -526,7 +560,7 @@
               <h5 class="title is-5">データの取り扱いとバックアップ</h5>
               <p>
                 Jimacのデータはお使いのブラウザのローカルストレージに保存され、サーバーには保存されません。<br>
-                データのバックアップやデータ移行、データのインポートは下記より行えます。
+                データのバックアップや、データのインポートは下記より行えます。（アクティベーションコードはバックアップされません）
               </p>
               <div class="columns has-text-centered m-2">
 
@@ -579,9 +613,84 @@
 
               </div>
             </div>
-          </div>
 
+            <p class="mt-5">Illust: <a href="https://twitter.com/merugamu_melgum" target="_blank">@merugamu_melgum</a></p>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QA Modal -->
+  <div class="modal_wrap">
+    <input id="qaTrigger" type="checkbox">
+      <div class="modal_overlay">
+        <label for="qaTrigger" class="modal_trigger"></label>
+        <div class="modal_content container" style="height: 90%; max-width: 1000px;">
+          <div style="height: 100%; overflow: scroll;">
+            <label for="qaTrigger" class="close_button">✖️</label>
+            <h2 class="title is-2">よくある質問</h2>
+            
+            <div class="mt-5">
+              <h5 class="title is-5">Jimacは商用可能ですか？</h5>
+              <p>
+                Jimacは<b>個人/法人、商用/非商用に関わらず誰でも</b>お使いいただけます。<br>
+                商用利用に際して有料化を行う必要もありません。
+              </p>
+            </div>
+
+            <div class="mt-5">
+              <h5 class="title is-5">Jimacの利用にあたって製作者への連絡やクレジット表記は必要ですか？</h5>
+              <p>
+                利用の際の連絡や製作者のクレジット表記は<b>不要</b>です。<br>
+                動画や配信の概要欄に十分なスペースがある場合に限り、<b>当サイトへのリンク表記</b>をお願いいたします。<br>
+                （Twitterでの告知や切り抜き動画などでは不要です）
+              </p>
+            </div>
+
+            <div class="mt-5">
+              <h5 class="title is-5">Jimacのデータはサーバーに保存されますか？</h5>
+              <p>
+                Jimacに登録した歌詞データは、利用ユーザーのブラウザ記憶領域（ローカルストレージ）に保存されます。<br>
+                Jimacは利用ユーザーが著作権を保持していない歌詞データ等を扱うことを想定しているため、全てのデータは<b>サーバーに保存されません</b>。
+                これにより、利用ユーザーは<b>個人利用の範囲内</b>で歌詞データを管理することができます。<br>
+                <br>
+                一方でサーバーで管理されない登録データは、ブラウザのキャッシュクリアやPC故障によって<b>データを失うリスク</b>があるため、使い方ページの最下部にある『バックアップ機能』を使い、手動でのバックアップを行ってください。<br>
+                データ消失に関する補填やサポートなどは一切行っておりません。
+              </p>
+            </div>
+            
+            <div class="mt-5">
+              <h5 class="title is-5">Jimacを利用した歌詞情報の配信/映り込みは著作権上問題ありませんか？</h5>
+              <p>
+                Jimacは著作物のデータを配布せず、サービスとしてデータの保存/管理も行わないため、他者の著作物に関しては一切<b>関知しません</b>。<br>
+                歌詞データ等の他者著作物を利用する際は、著作者の許諾の範囲内または著作権法上許可される利用の範囲内で適切にお使いください。
+              </p>
+            </div>
+            
+            <div class="mt-5">
+              <h5 class="title is-5">歌詞データ以外の登録、字幕として以外の利用は可能ですか</h5>
+              <p>
+                問題ありません。
+              </p>
+            </div>
+
+            <div class="mt-5">
+              <h5 class="title is-5">Jimacのバックアップデータを他者に配布することは可能ですか？</h5>
+              <p>
+                Jimacとしてバックアップデータの配布/共有を<b>禁止はしません</b>が、他者著作物を含む場合は公衆送信等の権利侵害に当たる利用を行わないよう、十分にご留意ください。
+              </p>
+            </div>
+
+            <div class="mt-5">
+              <h5 class="title is-5">意見要望や不具合の連絡などは送れますか</h5>
+              <p>
+                開発・運営者の<a href="https://twitter.com/OkuriSae">小栗さえ</a>まで、メンションまたはDMでご相談ください。
+              </p>
+            </div>
+
+            <p class="mt-5">Illust: <a href="https://twitter.com/merugamu_melgum" target="_blank">@merugamu_melgum</a></p>
+          </div>
       </div>
     </div>
   </div>
@@ -589,48 +698,47 @@
   <!-- Activate  Modal -->
   <div class="modal_wrap">
     <input id="activateTrigger" type="checkbox">
-      <div class="modal_overlay">
-        <label for="activateTrigger" class="modal_trigger"></label>
-        <div class="modal_content container" style="height: 60%; max-width: 1000px;">
-          <div style="height: 100%; overflow: scroll;">
-            <label for="activateTrigger" class="close_button">✖️</label>
-            <h2 class="title is-2">Jimacの有料化</h2>
+    <div class="modal_overlay">
+      <label for="activateTrigger" class="modal_trigger"></label>
+      <div class="modal_content container" style="height: 67%; max-width: 1000px;">
+        <div style="height: 100%; overflow: scroll;">
+          <label for="activateTrigger" class="close_button">✖️</label>
+          <h2 class="title is-2">Jimacの有料化</h2>
+          
+          <div class="mt-5">
+            <p>
+              Jimac有料版は <a href="">BOOTH</a> にて1,000円で購入いただけます。購入後はJimacのサービス終了まで無期限で利用できます。<br>
+              楽曲一覧部右下にある [<i v-if="isActivated" class="fas fa-lock"></i>] マークの入ったフォームに購入したコードを入力してアクティベートしてください。
+            </p>
+            <div class="modal-image">
+              <p class="has-text-centered"><img src="img/howto/jimaku_activate.png"></p>
+            </div>
             
-            <div class="mt-5">
-              <p>
-                Jimac有料版は <a href="">BOOTH</a> にて1,000円で購入いただけます。<br>
-                楽曲一覧部右下にある [<i v-if="isActivated" class="fas fa-lock"></i>] マークの入ったフォームに購入したコードを入力してアクティベートしてください。
-              </p>
-              <div class="modal-image">
-                <p class="has-text-centered"><img src="img/howto/jimaku_activate.png"></p>
+            <h5 class="title is-5">有料版の機能</h5>
+            <p>
+              有料版にアクティベートされると以下の機能が解放されます。
+              <div class="content">
+                <ul>
+                  <li>楽曲を6曲以上追加/管理可能になります。</li>
+                  <li>楽曲一覧下部のバナー広告が無くなります。</li>
+                  <li>歌詞を70行以上登録可能になります。</li>
+                  <li>タグを合計20文字以上登録可能になります。</li>
+                  <li>追加のフォント11種を利用できるようになります。</li>
+                </ul>
               </div>
-              
-              <h5 class="title is-5">有料版の機能</h5>
-              <p>
-                有料版にアクティベートされると以下の機能が解放されます。
-                <div class="content">
-                  <ul>
-                    <li>楽曲を6曲以上追加/管理可能になります。</li>
-                    <li>楽曲一覧下部のバナー広告が無くなります。</li>
-                    <li>歌詞を70行以上登録可能になります。</li>
-                    <li>タグを合計20文字以上登録可能になります。</li>
-                    <li>追加のフォント11種を利用できるようになります。</li>
-                  </ul>
-                </div>
-              </p>
-              
-              <div class="columns has-text-centered m-1">
-                <div class="column">
-                  <div class="button is-info" style="width: 320px;">
-                    <i class="fas fa-external-link-alt"> Jimac 有料版購入ページ [BOOTH]</i>
-                  </div>
-                </div>
+            </p>
+            
+            <div class="columns has-text-centered m-1">
+              <div class="column">
+                <a class="button is-info" style="width: 320px;" href="https://okurisae.booth.pm/items/3318579" target="_blank">
+                  <i class="fas fa-external-link-alt"> Jimac 有料版購入ページ [BOOTH]</i>
+                </a>
               </div>
             </div>
-
-
           </div>
 
+          <p class="mt-5">Illust: <a href="https://twitter.com/merugamu_melgum" target="_blank">@merugamu_melgum</a></p>
+        </div>
       </div>
     </div>
   </div>
@@ -665,7 +773,7 @@
             </div>
 
             <div class="mt-5">
-              <h5 class="title is-5">利用者の責任とコンテンツの権利</h5>
+              <h5 class="title is-5">利用者の責任</h5>
               <p>
                 利用者は、利用者の責任において当サービスを利用するものとし、当サービスにおいて行った一切の行為およびその結果について一切の責任を負うものとします。<br>
                 利用者は、当サービスを利用したことに起因して、運営者が直接的もしくは間接的に何らかの損害を被った場合、運営者の請求にしたがって直ちにこれを補償しなければなりません。
@@ -675,14 +783,15 @@
             <div class="mt-5">
               <h5 class="title is-5">禁止事項</h5>
               <p>
-                利用者は、BOOTHで購入したアクティベートに必要なコードを第三者に販売、譲渡、共有することはできません。<br>
-                利用者は、BOOTHで購入したアクティベートに必要なコードを公衆に公開することはできません。<br>
+                利用者は、購入したアクティベーションコードを第三者に販売、譲渡、共有することはできません。<br>
+                利用者は、購入したアクティベーションコードを公衆に公開、配布することはできません。<br>
                 利用者は、Jimacの開発に貢献する目的以外で、システムのソースコードを改変して有料機能を使用することはできません。<br>
                 利用者は、Jimacのソースコードを個人でホスティングし、第三者にJimacの機能を提供することはできません。<br>
                 利用者は、自動化されたプログラムなどを介してJimacのシステムに機械的にアクセスすることはできません。<br>
               </p>
             </div>
 
+            <p class="mt-5">Illust: <a href="https://twitter.com/merugamu_melgum" target="_blank">@merugamu_melgum</a></p>
           </div>
         </div>
       </div>
@@ -712,7 +821,7 @@
               <p>
                 本サービスではログイン状態の確認、ユーザー利便性の向上、トラフィックデータ収集、広告配信のためにCookieを利用しています。<br>
                 <br>
-                Cookieを利用する外部サービス以下になります。<br>
+                Cookieを利用する外部サービスは以下の2つです。<br>
                 - Google Analytics<br>
                 - Google AdSense<br>
                 <br>
@@ -749,6 +858,7 @@
               </p>
             </div>
 
+            <p class="mt-5">Illust: <a href="https://twitter.com/merugamu_melgum" target="_blank">@merugamu_melgum</a></p>
           </div>
 
       </div>
@@ -760,13 +870,14 @@
     <div class="content has-text-centered">
       <p>
         <a><label for="howToModalTrigger">使い方</label></a> | 
+        <a><label for="qaTrigger">よくある質問</label></a> | 
         <a><label for="activateTrigger">有料版の購入</label></a> | 
         <a><label for="termsModalTrigger">利用規約</label></a> | 
         <a><label for="privacyPolicyTrigger">プライバシーポリシー</label></a>
         <br>
         <span style="font-size: 0.9rem;">
           Copyright <i class="far fa-copyright"></i> 2021 <a href="https://twitter.com/OkuriSae" target="_blank">@OkuriSae</a> | 
-          Powered by <a href="https://github.com/OkuriSae/Jimac" target="_blank">GitHub</a>
+          Distributed by <a href="https://github.com/OkuriSae/Jimac" target="_blank">GitHub</a>
         </span>
       </p>
     </div>

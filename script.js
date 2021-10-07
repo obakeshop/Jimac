@@ -349,7 +349,7 @@ const jimac = Vue.createApp({
       const aTag = document.createElement('a');
       aTag.href = URL.createObjectURL(blob);
       aTag.target = '_blank';
-      aTag.download = `jimac_export_${Date.now()}.json`;
+      aTag.download = `jimac_${Date.now()}.json`;
       aTag.click();
       URL.revokeObjectURL(aTag.href);
     },
