@@ -71,6 +71,7 @@ const jimac = Vue.createApp({
     selectedSong: function() {
       this.loadSong(this.selectedSong);
       $('#lyrics').prop('selectionStart', 0);
+      this.jimakuIndex = 0;
       this.updateJimaku();
     },
 

@@ -1,4 +1,4 @@
-https://okurisae.github.io/Jimac/
+https://obakeshop.github.io/Jimac/
 
 # Jimac
 Jimacは、歌枠や歌ってみたの字幕オーバーレイ素材をお手軽に作れるWebツールです。  
