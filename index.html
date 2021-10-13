@@ -120,7 +120,7 @@
           </div>
 
           <!-- FontFamily -->
-          <div class="is-inline" @mouseover="hint('字幕のフォントを変更します' + (isActivated ? '' : '(有料版は+10フォント)'))">
+          <div class="is-inline" @mouseover="hint('字幕のフォントを変更します' + (isActivated ? '' : '(有料版は+11フォント)'))">
             <div class="button jimakuCtrl">Font:</div>
             <div class="select">
               <select name="fontFamily" style="width:170px;" v-model="jimakuFontFamily">
@@ -214,7 +214,7 @@
 
                     <!-- Create -->
                     <button v-if="!isLocked" class="button is-info is-small is-outlined songCtrl" @click="addSong" @mouseover="hint('曲を追加します。' + (isActivated ? '' : '(無料版は5曲まで)'))"><i class="fas fa-plus"></i></button>
-                    <a v-if="isLocked" href="https://booth.pm/ja" target="_blank" class="button is-info is-small is-outlined songCtrl" @mouseover="hint('5曲以上はアクティベーションが必要です。(クリックで購入サイト)')"><i class="fas fa-lock"></i></a>
+                    <a v-if="isLocked" href="https://obakeshop.booth.pm/items/3318579" target="_blank" class="button is-info is-small is-outlined songCtrl" @mouseover="hint('9曲以上はアクティベーションが必要です。(クリックで購入サイト)')"><i class="fas fa-lock"></i></a>
                     
                     <!-- Cross Change -->
                     <button class="button is-info is-small is-outlined songCtrl" @click="shiftSongForFilteredRepertory(-1)" :disabled="!canShiftUp" @mouseover="hint('1つ上の曲と順番を入れ替えます。')"><i class="fas fa-chevron-up"></i></button>
@@ -533,7 +533,7 @@
               </div>
               <h5 class="title is-5">楽曲管理</h5>
               <p>
-                [<i class="fas fa-plus"></i>] 楽曲を追加します。6曲目以降は<a href="#howto_activation">有料版へのアクティベート</a>が必要です。<br>
+                [<i class="fas fa-plus"></i>] 楽曲を追加します。9曲目以降は<a href="https://obakeshop.booth.pm/items/3318579">有料版</a>へのアクティベートが必要です。<br>
                 [<i class="fas fa-chevron-up"></i>] [<i class="fas fa-chevron-down"></i>] 選択中の楽曲を1つ上または下の(表示中の)楽曲と位置を入れ替えます。<br>
                 [<i class="fas fa-trash-alt"></i>] 選択中の楽曲を削除します。<br>
                 [<i class="fas fa-copy"></i>] 楽曲一覧（<a href="#howto_search">フィルタ</a>済みの内容）をクリップボードにコピーできます。
@@ -649,7 +649,7 @@
               <h5 class="title is-5">Jimacは商用可能ですか？</h5>
               <p>
                 Jimacは<b>個人/法人、商用/非商用に関わらず誰でも</b>お使いいただけます。<br>
-                商用利用に際して有料化を行う必要もありません。
+                商用利用に際して有料版購入を行う必要もありません。
               </p>
             </div>
 
@@ -690,6 +690,29 @@
             </div>
 
             <div class="mt-5">
+              <h5 class="title is-5">動画URLを設定したのですが再生できません。YouTubeやニコニコ上では見れるのですが……</h5>
+              <p>
+                YouTubeやニコニコでは他Webページ埋め込みでの再生を禁止する設定があります。埋め込み禁止設定のされている動画は再生できません。
+              </p>
+            </div>
+
+            <div class="mt-5">
+              <h5 class="title is-5">スマホ表示やウィンドウを小さくすると見た目が壊れます</h5>
+              <p>
+                仕様です。<br>
+                配信用ツールという性質上、ある程度長い横幅で使うことを想定したWebページですので、ウィンドウサイズが小さい場合の表示はあまり調整できていません。
+              </p>
+            </div>
+            
+            <div class="mt-5">
+              <h5 class="title is-5">壊れて動かなくなりました</h5>
+              <p>
+                保存されているデータが破損した可能性があります。<br>
+                『使い方』ページの一番下にある『データのバックアップ』を行った後、『データの初期化』をしてみてください。
+              </p>
+            </div>
+
+            <div class="mt-5">
               <h5 class="title is-5">Jimacのバックアップデータを他者に配布することは可能ですか？</h5>
               <p>
                 Jimacとしてバックアップデータの配布/共有を<b>禁止はしません</b>が、他者著作物を含む場合は公衆送信等の権利侵害に当たる利用を行わないよう、十分にご留意ください。
@@ -721,7 +744,7 @@
           
           <div class="mt-5">
             <p>
-              Jimac有料版は <a href="">BOOTH</a> にて1,000円で購入いただけます。購入後はJimacのサービス終了まで無期限で利用できます。<br>
+              Jimac有料版は <a href="https://obakeshop.booth.pm/items/3318579">BOOTH</a> にて1,000円で購入いただけます。購入後はJimacのサービス終了まで無期限で利用できます。<br>
               楽曲一覧部右下にある [<i v-if="isActivated" class="fas fa-lock"></i>] マークの入ったフォームに購入したコードを入力してアクティベートしてください。
             </p>
             <div class="modal-image">
@@ -733,11 +756,11 @@
               有料版にアクティベートされると以下の機能が解放されます。
               <div class="content">
                 <ul>
-                  <li>楽曲を6曲以上追加/管理可能になります。</li>
+                  <li>楽曲を9曲以上追加/管理可能になります。</li>
+                  <li>追加のフォント11種を利用できるようになります。</li>
                   <li>楽曲一覧下部のバナー広告が無くなります。</li>
                   <li>歌詞を70行以上登録可能になります。</li>
                   <li>タグを合計20文字以上登録可能になります。</li>
-                  <li>追加のフォント11種を利用できるようになります。</li>
                 </ul>
               </div>
             </p>

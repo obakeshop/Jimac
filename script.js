@@ -51,7 +51,7 @@ const jimac = Vue.createApp({
       return `https://embed.nicovideo.jp/watch/${nicoId}/script?w=408&h=230`;
     },
     isLocked: function() {
-      return this.songIds.length >= 5 && !this.isActivated;
+      return this.songIds.length >= 8 && !this.isActivated;
     }
   },
 
