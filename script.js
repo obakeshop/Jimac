@@ -326,7 +326,7 @@ const jimac = Vue.createApp({
     },
 
     deleteSong() { // データ消去
-      if (lyricFirstValues.includes(this.lyrics) && !confirm('本当に消去しますか？')) {
+      if (!lyricFirstValues.includes(this.lyrics) && !confirm('本当に消去しますか？')) {
         return;
       }
 
