@@ -1,7 +1,64 @@
 'use strict'
-const lyricsFirstValue = `曲名 / アーティスト
 
-ここに歌詞を貼り付けます`;
+const lyricFirstValues = [`Jimac - 歌枠字幕ジェネレータ -
+
+歌枠をもっとオシャレにしよう！
+Jimac は歌枠の歌詞字幕オーバーレイを
+お手軽に作れるWebツールです
+
+配信前に中央のボードに歌詞を
+貼り付けて準備をします。
+配信中は左右キーで字幕を
+切り替えるだけ！
+
+背景や文字の色、フォントは
+自由に変えられます。
+流れるようなアニメーションと、
+落ちてくるようなアニメーションの
+2種類が選べます
+
+楽曲は複数登録することができて、
+ワンクリックで切り替えられます。
+曲名でフィルタをかけたり曲ごとに
+タグを登録することで
+ボカロ曲やバラードなどのフィルタも
+することができます。
+曲ごとに練習用の動画やカラオケ音源に
+なる動画なども登録できます
+
+殆どの機能は無料で使うことができますが
+有料版を購入すると
+楽曲の登録がいくらでもできるようになり
+フォントが+11種類などなど
+
+歌枠字幕ジェネレータ 
+Jimac をよろしくお願いします！`,
+`タイトル / アーティスト
+
+ここに歌詞を貼り付けます`];
+
+const settingTemplate = {
+  jimakuBackColor: "#00FF00", 
+  jimakuTextColor: "#3333FF",
+  jimakuFontFamily: "'Kiwi Maru', serif",
+  jimakuAnim: "none",
+  jimakuOutline: true,
+  preview: false,
+};
+
+const songTemplate = first => { 
+  return { 
+    lyrics: lyricFirstValues[first ? 0 : 1],
+    jimakuFontSize: '42pt', 
+    movieUrl: first ? 'https://www.youtube.com/watch?v=LyN8rhlrndI' : '', 
+    tags: '', 
+  };
+};
+
+const activationTemplate = {
+  activationCode: '',
+  isActivated: false,
+};
 
 const activationHashes = [
   '962540c1187c0cd1d4a624c124b3842d61ef1654a4957d5afa4bdbd8bf4e561d',
@@ -148,30 +205,13 @@ const jimac = Vue.createApp({
 
   methods: {
     createSettings() {
-      localStorage.setItem("settings", JSON.stringify({
-        jimakuBackColor: "#00FF00", 
-        jimakuTextColor: "#3333FF",
-        jimakuFontFamily: "'Kiwi Maru', serif",
-        jimakuAnim: "none",
-        jimakuOutline: true,
-        preview: false,
-      }));
-      
-      localStorage.setItem("activation", JSON.stringify({
-        activationCode: '',
-        isActivated: false,
-      }));
-
+      localStorage.setItem("settings", JSON.stringify(settingTemplate));
+      localStorage.setItem("activation", JSON.stringify(activationTemplate));
       this.loadSettings();
     },
-    createSong() {
+    createSong(first) {
       const newId = Date.now();
-      localStorage.setItem(newId, JSON.stringify({ 
-        lyrics: lyricsFirstValue, 
-        jimakuFontSize: '42pt', 
-        movieUrl: '', 
-        tags: '', 
-      }));
+      localStorage.setItem(newId, JSON.stringify(songTemplate(first)));
       this.songIds = [newId].concat((this.songIds || []));
       this.selectedSong = newId;
     },
@@ -255,15 +295,13 @@ const jimac = Vue.createApp({
     },
 
     updateJimaku() {
-      if (this.jimakuAnim) {
-        this.jimaku = ""; // Reset animation
+      if (this.jimakuAnim) { // Reset animation
+        this.jimaku = "";
       }
       this.$nextTick(function() { // Waiting for reset animation
         this.jimaku = this.splitedLyrics[this.jimakuIndex];
         this.previewText = this.preview ? this.splitedLyrics[this.jimakuIndex+1] : '';
-        $("#jimaku-0").addClass("jimaku-0");
-        $("#jimaku-1").addClass("jimaku-1");
-        $("#jimaku-2").addClass("jimaku-2");
+        $(".jimaku-lines").addClass("on");
       });
     },
 
@@ -284,11 +322,11 @@ const jimac = Vue.createApp({
 
     addSong() {
       this.searchText = "";
-      this.createSong();
+      this.createSong(false);
     },
 
     deleteSong() { // データ消去
-      if (this.lyrics !== lyricsFirstValue && !confirm('本当に消去しますか？')) {
+      if (lyricFirstValues.includes(this.lyrics) && !confirm('本当に消去しますか？')) {
         return;
       }
 
@@ -296,7 +334,7 @@ const jimac = Vue.createApp({
 
       this.$nextTick(function() {
         if (!this.songIds.length) { // 全部消しちゃったら１個新規で作る
-          this.createSong();
+          this.createSong(true);
         } else {
           this.selectedSong = this.filteredRepertory[0].id;
         }
@@ -380,7 +418,7 @@ const jimac = Vue.createApp({
     this.$nextTick(function() {
       if (!localStorage.getItem("settings")) {
         this.createSettings();
-        this.createSong();
+        this.createSong(true);
         $("#howToModalTrigger").prop('checked', true);
       } else {
         this.loadSettings();

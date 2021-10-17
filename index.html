@@ -61,40 +61,39 @@
           {{ previewText }}
         </div>
 
-        <!-- Jimaku -->
-        <button id="jimaku" class="button jimaku-area clipboard" :data-clipboard-text="jimaku" @mouseover="hint('クリックで表示中の歌詞をクリップボードにコピー')">
+        <!-- text CSS -->
+        <component is="style">
+          .jimaku-area {
+            background-color: {{ jimakuBackColor }};
+          }
+          .jimaku{
+            font-size: {{ jimakuFontSize }};
+            font-family: {{ jimakuFontFamily }};
+          }
+          .jimaku-0,.jimaku-2.on{
+            color: {{ jimakuTextColor }};
+          }
+        </component>
+        
+        <!-- anim CSS (Toggle) -->
+        <component v-if="jimakuAnim !== 'none'" is="style">
+          @keyframes text-in {
+            0% {
+              transform: translate(0, -20px);
+              opacity: 0;
+            }
+          }
+          .item {
+            display: inline-block;
+            animation: text-in .8s cubic-bezier(0.22, 0.15, 0.25, 1.43) 0s backwards;
+          }
+        </component>
 
-          <!-- text CSS -->
-          <component is="style">
-            .jimaku-area {
-              background-color: {{ jimakuBackColor }};
-            }
-            .jimaku{
-              font-size: {{ jimakuFontSize }};
-              font-family: {{ jimakuFontFamily }};
-            }
-            .jimaku-0,.jimaku-2{
-              color: {{ jimakuTextColor }};
-            }
-          </component>
-          
-          <!-- anim CSS (Toggle) -->
-          <component v-if="jimakuAnim !== 'none'" is="style">
-            @keyframes text-in {
-              0% {
-                transform: translate(0, -20px);
-                opacity: 0;
-              }
-            }
-            .item {
-              display: inline-block;
-              animation: text-in .8s cubic-bezier(0.22, 0.15, 0.25, 1.43) 0s backwards;
-            }
-          </component>
-          
-          <div v-show="jimakuOutline" id="jimaku-0"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*80)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
-          <div v-show="jimakuOutline" id="jimaku-1"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*80)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
-          <div id="jimaku-2"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*80)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
+        <!-- Jimaku -->
+        <button id="jimaku" class="button jimaku-area clipboard wide" :data-clipboard-text="jimaku" @mouseover="hint('クリックで表示中の歌詞をクリップボードにコピー')">
+          <div v-show="jimakuOutline" class="jimaku-lines jimaku-0 active"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*70)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
+          <div v-show="jimakuOutline" class="jimaku-lines jimaku-1 active"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*70)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
+          <div                        class="jimaku-lines jimaku-2 active"><span v-for="(t, i) in jimaku" :key="i" class="item jimaku" :style="{animationDelay: (i*70)*(jimakuAnim==='fall'?0:1)+'ms'}">{{ t === ' ' ? '\xa0' : t }}</span></div>
         </button>
         
         <div id="jimakuController">
