@@ -107,7 +107,7 @@
           </div>
 
           <!-- BackColor -->
-          <div class="is-inline" @mouseover="hint('背景色を変更します')">
+          <div class="is-inline" @mouseover="hint('背景色を変更します。有彩色はクロマキー、無彩色はカラーキーがおススメです。')">
             <div class="button jimakuCtrl">Back:</div>
             <input class="input" style="width:44px;" type="color" v-model="jimakuBackColor" placeholder="#BackColor">
           </div>
@@ -151,7 +151,7 @@
           </div>
 
           <!-- Animation -->
-          <div class="button jimakuCtrl" @mouseover="hint('字幕にアニメーションを設定できます')">Animation:</div>
+          <div class="button jimakuCtrl" @mouseover="hint('字幕にアニメーションを設定できます。黒背景のカラーキーフィルタにすると綺麗に抜けます。')">Animation:</div>
           <div class="select">
             <select style="width:92px;" v-model="jimakuAnim">
               <option value="none">none</option>
